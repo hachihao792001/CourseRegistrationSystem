@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate
+Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class catalog="qlhocphan" name="pojo.SinhVien" table="SinhVien">
+		<id name="mssv" type="string">
+			<column length="8" name="Mssv" />
+			<generator class="assigned" />
+		</id>
+
+		<many-to-one class="pojo.TaiKhoan" name="taiKhoan" fetch="select">
+			<column length="30" name="tenTaiKhoan" not-null="true" />
+		</many-to-one>
+
+		<property name="hoTen" type="string">
+			<column length="30" name="HoTen" />
+		</property>
+		<property name="gioiTinh" type="string">
+			<column length="3" name="GioiTinh" />
+		</property>
+		<property name="ngSinh" type="date">
+			<column length="10" name="NgSinh" />
+		</property>
+
+
+	</class>
+</hibernate-mapping>

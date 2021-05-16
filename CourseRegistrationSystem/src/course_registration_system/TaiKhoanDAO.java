@@ -6,14 +6,14 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 
-import pojo.GiaoVien;
+import pojo.*;
 
-public class GiaoVienDAO {
-	public static List<GiaoVien> layDanhSachSinhVien() {
-		List<GiaoVien> ds = null;
+public class TaiKhoanDAO {
+	public static List<TaiKhoan> layDanhSachTaiKhoan() {
+		List<TaiKhoan> ds = null;
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		try {
-			String hql = "select sv from GiaoVien sv";
+			String hql = "select tk from TaiKhoan tk";
 			Query query = session.createQuery(hql);
 			ds = query.list();
 		} catch (HibernateException ex) {
