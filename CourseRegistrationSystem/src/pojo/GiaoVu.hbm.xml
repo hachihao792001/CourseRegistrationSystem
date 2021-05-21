@@ -2,9 +2,9 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate
 Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<class catalog="qlhocphan" name="pojo.SinhVien" table="SinhVien">
-		
-		<id name="mssv" column="Mssv" type="integer">
+	<class catalog="qlhocphan" name="pojo.GiaoVu" table="GiaoVu">
+		<id name="maGVu" type="int">
+			<column name="MaGVu"/>
 			<generator class="identity" />
 		</id>
 
@@ -12,8 +12,8 @@ Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd
 			<column length="30" name="tenTaiKhoan" not-null="true" />
 		</many-to-one>
 
-		<property name="hoTen" type="string">
-			<column length="30" name="HoTen" />
+		<property name="tenGiaoVu" type="string">
+			<column length="30" name="TenGiaoVu" />
 		</property>
 		<property name="gioiTinh" type="string">
 			<column length="3" name="GioiTinh" />

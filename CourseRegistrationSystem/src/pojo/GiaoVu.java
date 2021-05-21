@@ -2,42 +2,30 @@ package pojo;
 
 import java.util.Date;
 
-public class SinhVien {
-	private int mssv;
+public class GiaoVu {
+	private int maGVu;
 	private TaiKhoan taiKhoan;
-	private String hoTen;
+	private String tenGiaoVu;
 	private String gioiTinh;
 	private Date ngSinh;
 
-	public SinhVien(int mssv, TaiKhoan taiKhoan, String hoTen, String gioiTinh, Date ngSinh) {
-		this.mssv = mssv;
+	public GiaoVu() {
+	}
+
+	public GiaoVu(int maGVu, TaiKhoan taiKhoan, String tenGiaoVu, String gioiTinh, Date ngSinh) {
+		this.maGVu = maGVu;
 		this.taiKhoan = taiKhoan;
-		this.hoTen = hoTen;
+		this.tenGiaoVu = tenGiaoVu;
 		this.gioiTinh = gioiTinh;
 		this.ngSinh = ngSinh;
 	}
 
-	public SinhVien() {
+	public int getMaGVu() {
+		return maGVu;
 	}
 
-	public SinhVien(int mssv) {
-		this.mssv = mssv;
-	}
-
-	public int getMssv() {
-		return mssv;
-	}
-
-	public void setMssv(int mssv) {
-		this.mssv = mssv;
-	}
-
-	public String getHoTen() {
-		return hoTen;
-	}
-
-	public void setHoTen(String hoTen) {
-		this.hoTen = hoTen;
+	public void setMaGVu(int maGVu) {
+		this.maGVu = maGVu;
 	}
 
 	public TaiKhoan getTaiKhoan() {
@@ -46,6 +34,14 @@ public class SinhVien {
 
 	public void setTaiKhoan(TaiKhoan taiKhoan) {
 		this.taiKhoan = taiKhoan;
+	}
+
+	public String getTenGiaoVu() {
+		return tenGiaoVu;
+	}
+
+	public void setTenGiaoVu(String tenGiaoVu) {
+		this.tenGiaoVu = tenGiaoVu;
 	}
 
 	public String getGioiTinh() {
@@ -63,4 +59,5 @@ public class SinhVien {
 	public void setNgSinh(Date ngSinh) {
 		this.ngSinh = ngSinh;
 	}
+
 }

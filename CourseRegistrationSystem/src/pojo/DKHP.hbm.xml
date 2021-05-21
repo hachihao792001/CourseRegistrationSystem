@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate
+Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class catalog="qlhocphan" name="pojo.DKHP" table="DKHP">
+
+		<id name="maDKHP" column="MaDKHP" type="integer">
+			<generator class="identity" />
+		</id>
+
+		<many-to-one class="pojo.SinhVien" name="sinhVien" fetch="select">
+			<column length="8" name="Mssv" not-null="true" />
+		</many-to-one>
+
+		<many-to-one class="pojo.HocPhan" name="hocPhan" fetch="select">
+			<column name="MaHP" not-null="true" />
+		</many-to-one>
+
+		<many-to-one class="pojo.GiaoVien" name="gvlt" fetch="select">
+			<column name="Gvlt" not-null="true" />
+		</many-to-one>
+
+		<property name="thoiGianHoc" type="date">
+			<column length="10" name="ThoiGianHoc" />
+		</property>
+		<property name="thoiGianDKHP" type="date">
+			<column length="10" name="ThoiGianDKHP" />
+		</property>
+	</class>
+</hibernate-mapping>

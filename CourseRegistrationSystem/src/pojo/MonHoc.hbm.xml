@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate
+Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class catalog="qlhocphan" name="pojo.MonHoc" table="MonHoc">
+		<id name="maMH" type="string">
+			<column length="6" name="MaMH" />
+			<generator class="assigned" />
+		</id>
+		<property name="tenMH" type="string">
+			<column length="30" name="TenMH" />
+		</property>
+		<property name="soTinChi" type="int">
+			<column name="SoTinChi" />
+		</property>
+	</class>
+</hibernate-mapping>

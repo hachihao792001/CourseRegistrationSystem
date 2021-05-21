@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate
+Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class catalog="qlhocphan" name="pojo.LopHoc" table="LopHoc">
+		<id name="maLop" type="string">
+			<column length="7" name="MaLop" />
+			<generator class="assigned" />
+		</id>
+
+		<property name="tongSoSV" type="int">
+			<column name="TongSoSV" />
+		</property>
+		<property name="tongSoNam" type="int">
+			<column name="TongSoNam" />
+		</property>
+		<property name="tongSoNu" type="int">
+			<column name="TongSoNu" />
+		</property>
+
+
+	</class>
+</hibernate-mapping>
