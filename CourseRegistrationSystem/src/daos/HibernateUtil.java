@@ -1,4 +1,4 @@
-package course_registration_system;
+package daos;
 
 import org.hibernate.cfg.Configuration;
 import org.hibernate.SessionFactory;

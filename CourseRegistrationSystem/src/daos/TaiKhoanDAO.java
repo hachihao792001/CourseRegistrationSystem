@@ -1,4 +1,4 @@
-package course_registration_system;
+package daos;
 
 import java.util.List;
 

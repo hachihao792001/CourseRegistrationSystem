@@ -1,4 +1,4 @@
-package course_registration_system;
+package daos;
 
 import java.util.List;
 
@@ -9,26 +9,26 @@ import org.hibernate.query.Query;
 
 import pojo.*;
 
-public class GiaoVienDAO {
-	public static GiaoVien layThongTinGiaoVien(String maGV) {
-		GiaoVien gv = null;
+public class LopHocDAO {
+	public static LopHoc layThongTinLopHoc(String maLop) {
+		LopHoc sv = null;
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		try {
-			gv = (GiaoVien) session.get(GiaoVien.class, maGV);
+			sv = (LopHoc) session.get(LopHoc.class, maLop);
 		} catch (HibernateException ex) {
 			// Log the exception
 			System.err.println(ex);
 		} finally {
 			session.close();
 		}
-		return gv;
+		return sv;
 	}
 
-	public static List<GiaoVien> layDanhSachGiaoVien() {
-		List<GiaoVien> ds = null;
+	public static List<LopHoc> layDanhSachLopHoc() {
+		List<LopHoc> ds = null;
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		try {
-			String hql = "select sv from GiaoVien sv";
+			String hql = "select sv from LopHoc sv";
 			Query query = session.createQuery(hql);
 			ds = query.list();
 

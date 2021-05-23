@@ -1,6 +1,5 @@
-package course_registration_system;
+package daos;
 
-import java.io.Serializable;
 import java.util.List;
 
 import org.hibernate.Hibernate;
@@ -10,29 +9,32 @@ import org.hibernate.query.Query;
 
 import pojo.*;
 
-public class HocKiDAO {
-	public static HocKi layThongTinHocKi(String maHK) {
-		HocKi hk = null;
+public class KyDKHPDAO {
+	public static KyDKHP layThongTinKyDKHP(String maKyDKHP) {
+		KyDKHP kyDKHP = null;
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		try {
-			hk = (HocKi) session.get(HocKi.class, maHK);
+			kyDKHP = (KyDKHP) session.get(KyDKHP.class, maKyDKHP);
+			Hibernate.initialize(kyDKHP.getHocKi());
 		} catch (HibernateException ex) {
 			// Log the exception
 			System.err.println(ex);
 		} finally {
 			session.close();
 		}
-		return hk;
+		return kyDKHP;
 	}
 
-	public static List<HocKi> layDanhSachHocKi() {
-		List<HocKi> ds = null;
+	public static List<KyDKHP> layDanhSachKyDKHP() {
+		List<KyDKHP> ds = null;
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		try {
-			String hql = "select hk from HocKi hk";
+			String hql = "select hk from KyDKHP hk";
 			Query query = session.createQuery(hql);
 			ds = query.list();
-			
+			for (KyDKHP kyDKHP : ds)
+				Hibernate.initialize(kyDKHP.getHocKi());
+
 		} catch (HibernateException ex) {
 			// Log the exception
 			System.err.println(ex);

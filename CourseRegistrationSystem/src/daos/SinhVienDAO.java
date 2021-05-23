@@ -1,4 +1,4 @@
-package course_registration_system;
+package daos;
 
 import java.util.List;
 
@@ -9,31 +9,31 @@ import org.hibernate.query.Query;
 
 import pojo.*;
 
-public class GiaoVuDAO {
-	public static GiaoVu layThongTinGiaoVu(String maGVu) {
-		GiaoVu gv = null;
+public class SinhVienDAO {
+	public static SinhVien layThongTinSinhVien(String mssv) {
+		SinhVien sv = null;
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		try {
-			gv = (GiaoVu) session.get(GiaoVu.class, maGVu);
-			Hibernate.initialize(gv.getTaiKhoan());
+			sv = (SinhVien) session.get(SinhVien.class, mssv);
+			Hibernate.initialize(sv.getTaiKhoan());
 		} catch (HibernateException ex) {
 			// Log the exception
 			System.err.println(ex);
 		} finally {
 			session.close();
 		}
-		return gv;
+		return sv;
 	}
 
-	public static List<GiaoVu> layDanhSachGiaoVu() {
-		List<GiaoVu> ds = null;
+	public static List<SinhVien> layDanhSachSinhVien() {
+		List<SinhVien> ds = null;
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		try {
-			String hql = "select sv from GiaoVu sv";
+			String hql = "select sv from SinhVien sv";
 			Query query = session.createQuery(hql);
 			ds = query.list();
-			for (GiaoVu gv : ds)
-				Hibernate.initialize(gv.getTaiKhoan());
+			for (SinhVien sv : ds)
+				Hibernate.initialize(sv.getTaiKhoan());
 
 		} catch (HibernateException ex) {
 			// Log the exception

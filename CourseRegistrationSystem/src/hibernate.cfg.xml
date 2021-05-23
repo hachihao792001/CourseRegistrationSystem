@@ -9,16 +9,16 @@
 		<property name="hibernate.connection.url">jdbc:mysql://localhost:3306/qlhocphan</property>
 		<property name="hibernate.connection.username">root</property>
 		<property name="hibernate.connection.password">Hao0971196883</property>
-		<mapping resource="pojo/TaiKhoan.hbm.xml" />
-		<mapping resource="pojo/SinhVien.hbm.xml" />
-		<mapping resource="pojo/GiaoVu.hbm.xml" />
-		<mapping resource="pojo/HocKi.hbm.xml" />
-		<mapping resource="pojo/KyDKHP.hbm.xml" />
-		<mapping resource="pojo/LopHoc.hbm.xml" />
-		<mapping resource="pojo/Hoc.hbm.xml" />
-		<mapping resource="pojo/MonHoc.hbm.xml" />
-		<mapping resource="pojo/GiaoVien.hbm.xml" />
-		<mapping resource="pojo/HocPhan.hbm.xml" />
-		<mapping resource="pojo/DKHP.hbm.xml" />
+		<mapping resource="pojo/xmls/TaiKhoan.hbm.xml" />
+		<mapping resource="pojo/xmls/SinhVien.hbm.xml" />
+		<mapping resource="pojo/xmls/GiaoVu.hbm.xml" />
+		<mapping resource="pojo/xmls/HocKi.hbm.xml" />
+		<mapping resource="pojo/xmls/KyDKHP.hbm.xml" />
+		<mapping resource="pojo/xmls/LopHoc.hbm.xml" />
+		<mapping resource="pojo/xmls/Hoc.hbm.xml" />
+		<mapping resource="pojo/xmls/MonHoc.hbm.xml" />
+		<mapping resource="pojo/xmls/GiaoVien.hbm.xml" />
+		<mapping resource="pojo/xmls/HocPhan.hbm.xml" />
+		<mapping resource="pojo/xmls/DKHP.hbm.xml" />
 	</session-factory>
 </hibernate-configuration>

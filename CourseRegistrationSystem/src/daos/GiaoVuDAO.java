@@ -1,4 +1,4 @@
-package course_registration_system;
+package daos;
 
 import java.util.List;
 
@@ -9,31 +9,31 @@ import org.hibernate.query.Query;
 
 import pojo.*;
 
-public class KyDKHPDAO {
-	public static KyDKHP layThongTinKyDKHP(String maKyDKHP) {
-		KyDKHP kyDKHP = null;
+public class GiaoVuDAO {
+	public static GiaoVu layThongTinGiaoVu(String maGVu) {
+		GiaoVu gv = null;
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		try {
-			kyDKHP = (KyDKHP) session.get(KyDKHP.class, maKyDKHP);
-			Hibernate.initialize(kyDKHP.getHocKi());
+			gv = (GiaoVu) session.get(GiaoVu.class, maGVu);
+			Hibernate.initialize(gv.getTaiKhoan());
 		} catch (HibernateException ex) {
 			// Log the exception
 			System.err.println(ex);
 		} finally {
 			session.close();
 		}
-		return kyDKHP;
+		return gv;
 	}
 
-	public static List<KyDKHP> layDanhSachKyDKHP() {
-		List<KyDKHP> ds = null;
+	public static List<GiaoVu> layDanhSachGiaoVu() {
+		List<GiaoVu> ds = null;
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		try {
-			String hql = "select hk from KyDKHP hk";
+			String hql = "select sv from GiaoVu sv";
 			Query query = session.createQuery(hql);
 			ds = query.list();
-			for (KyDKHP kyDKHP : ds)
-				Hibernate.initialize(kyDKHP.getHocKi());
+			for (GiaoVu gv : ds)
+				Hibernate.initialize(gv.getTaiKhoan());
 
 		} catch (HibernateException ex) {
 			// Log the exception
