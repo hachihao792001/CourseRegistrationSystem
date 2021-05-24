@@ -2,7 +2,6 @@ package daos;
 
 import java.util.List;
 
-import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
@@ -29,7 +28,8 @@ public class MonHocDAO {
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		try {
 			String hql = "select tk from MonHoc tk";
-			Query query = session.createQuery(hql);
+			@SuppressWarnings("unchecked")
+			Query<MonHoc> query = session.createQuery(hql);
 			ds = query.list();
 		} catch (HibernateException ex) {
 			// Log the exception

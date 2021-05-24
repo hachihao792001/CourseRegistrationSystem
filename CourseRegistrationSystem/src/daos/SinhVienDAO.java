@@ -30,7 +30,8 @@ public class SinhVienDAO {
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		try {
 			String hql = "select sv from SinhVien sv";
-			Query query = session.createQuery(hql);
+			@SuppressWarnings("unchecked")
+			Query<SinhVien> query = session.createQuery(hql);
 			ds = query.list();
 			for (SinhVien sv : ds)
 				Hibernate.initialize(sv.getTaiKhoan());

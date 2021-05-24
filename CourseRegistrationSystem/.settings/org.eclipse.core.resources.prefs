@@ -1,4 +1,10 @@
 eclipse.preferences.version=1
+encoding//src/course_registration_system/GiaoVuHocKiPanel.java=UTF-8
+encoding//src/course_registration_system/GiaoVuHocPhanPanel.java=UTF-8
+encoding//src/course_registration_system/GiaoVuKyDKHPPanel.java=UTF-8
+encoding//src/course_registration_system/GiaoVuLopHocPanel.java=UTF-8
+encoding//src/course_registration_system/GiaoVuMonHocPanel.java=UTF-8
+encoding//src/course_registration_system/GiaoVuTaiKhoanPanel.java=UTF-8
 encoding//src/course_registration_system/LoginScreen.java=UTF-8
 encoding//src/course_registration_system/Main.java=UTF-8
 encoding//src/course_registration_system/MainScreen.java=UTF-8

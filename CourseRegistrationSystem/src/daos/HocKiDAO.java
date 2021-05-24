@@ -1,9 +1,7 @@
 package daos;
 
-import java.io.Serializable;
 import java.util.List;
 
-import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
@@ -30,7 +28,8 @@ public class HocKiDAO {
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		try {
 			String hql = "select hk from HocKi hk";
-			Query query = session.createQuery(hql);
+			@SuppressWarnings("unchecked")
+			Query<HocKi> query = session.createQuery(hql);
 			ds = query.list();
 			
 		} catch (HibernateException ex) {

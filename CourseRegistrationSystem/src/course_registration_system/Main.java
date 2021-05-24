@@ -1,12 +1,7 @@
 package course_registration_system;
 
 import java.io.IOException;
-import java.util.*;
-
 import javax.swing.UIManager;
-
-import daos.DKHPDAO;
-import pojo.*;
 
 public class Main {
 	static void createAndShowUI() throws IOException {
@@ -15,7 +10,7 @@ public class Main {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		new LoginScreen();
+		new MainScreen();
 	}
 
 	public static void main(String args[]) throws IOException {

@@ -30,7 +30,8 @@ public class GiaoVuDAO {
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		try {
 			String hql = "select sv from GiaoVu sv";
-			Query query = session.createQuery(hql);
+			@SuppressWarnings("unchecked")
+			Query<GiaoVu> query = session.createQuery(hql);
 			ds = query.list();
 			for (GiaoVu gv : ds)
 				Hibernate.initialize(gv.getTaiKhoan());

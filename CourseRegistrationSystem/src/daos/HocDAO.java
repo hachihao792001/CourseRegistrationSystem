@@ -31,7 +31,8 @@ public class HocDAO {
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		try {
 			String hql = "select sv from Hoc sv";
-			Query query = session.createQuery(hql);
+			@SuppressWarnings("unchecked")
+			Query<Hoc> query = session.createQuery(hql);
 			ds = query.list();
 			for (Hoc h : ds) {
 				Hibernate.initialize(h.getSinhVien());

@@ -14,7 +14,8 @@ public class TaiKhoanDAO {
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		try {
 			String hql = "select tk from TaiKhoan tk";
-			Query query = session.createQuery(hql);
+			@SuppressWarnings("unchecked")
+			Query<TaiKhoan> query = session.createQuery(hql);
 			ds = query.list();
 		} catch (HibernateException ex) {
 			// Log the exception

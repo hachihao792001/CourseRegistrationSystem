@@ -33,7 +33,8 @@ public class DKHPDAO {
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		try {
 			String hql = "select sv from DKHP sv";
-			Query query = session.createQuery(hql);
+			@SuppressWarnings("unchecked")
+			Query<DKHP> query = session.createQuery(hql);
 			ds = query.list();
 			for (DKHP h : ds) {
 				Hibernate.initialize(h.getSinhVien());

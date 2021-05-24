@@ -30,7 +30,8 @@ public class KyDKHPDAO {
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		try {
 			String hql = "select hk from KyDKHP hk";
-			Query query = session.createQuery(hql);
+			@SuppressWarnings("unchecked")
+			Query<KyDKHP> query = session.createQuery(hql);
 			ds = query.list();
 			for (KyDKHP kyDKHP : ds)
 				Hibernate.initialize(kyDKHP.getHocKi());

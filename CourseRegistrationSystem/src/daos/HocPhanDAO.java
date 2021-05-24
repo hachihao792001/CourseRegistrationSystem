@@ -32,7 +32,8 @@ public class HocPhanDAO {
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		try {
 			String hql = "select sv from HocPhan sv";
-			Query query = session.createQuery(hql);
+			@SuppressWarnings("unchecked")
+			Query<HocPhan> query = session.createQuery(hql);
 			ds = query.list();
 			for (HocPhan hp : ds) {
 				Hibernate.initialize(hp.getMonHoc());

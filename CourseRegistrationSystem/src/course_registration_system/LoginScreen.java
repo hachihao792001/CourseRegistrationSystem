@@ -17,12 +17,12 @@ public class LoginScreen extends JFrame implements ActionListener {
 		GridBagConstraints gridBagConstraints;
 		JPanel loginContent = new JPanel(new GridBagLayout());
 
-		Title = new javax.swing.JLabel();
-		accLabel = new javax.swing.JLabel();
-		accText = new javax.swing.JTextField();
-		passLabel = new javax.swing.JLabel();
-		passText = new javax.swing.JTextField();
-		loginButton = new javax.swing.JButton();
+		Title = new JLabel();
+		accLabel = new JLabel();
+		accText = new JTextField();
+		passLabel = new JLabel();
+		passText = new JTextField();
+		loginButton = new JButton();
 
 		setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 		setMinimumSize(new java.awt.Dimension(337, 171));
