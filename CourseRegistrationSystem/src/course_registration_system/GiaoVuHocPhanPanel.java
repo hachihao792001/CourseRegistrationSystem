@@ -5,6 +5,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
 import daos.HocPhanDAO;
@@ -12,17 +14,28 @@ import daos.HocPhanDAO;
 public class GiaoVuHocPhanPanel extends JPanel implements ActionListener {
 	private static final long serialVersionUID = 1L;
 
+	JPanel listPanel, buttonPanel;
+	InfoPanel infoPanel;
+
 	public GiaoVuHocPhanPanel() {
 		this.setLayout(new GridBagLayout());
 		GBCBuilder gbc = new GBCBuilder(1, 1);
 
 		// ------------------------ LIST PANEL --------------------------------
-		JPanel listPanel = new JPanel(new GridBagLayout());
+		listPanel = new JPanel(new GridBagLayout());
 		JScrollPane gvListScrollPane = new JScrollPane();
 		JTable giaoVuTable = new JTable();
-		giaoVuTable.setModel(new DefaultTableModel(HocPhanDAO.getObjectMatrix(),
-				new String[] { "Mã môn học", "Giáo viên lý thuyết", "Tên phòng", "Thứ", "Ca", "Slot tối đa" }));
+		giaoVuTable.setModel(new DefaultTableModel(HocPhanDAO.getObjectMatrix(), new String[] { "Mã môn", "Tên môn",
+				"Số tín chỉ", "Giáo viên lý thuyết", "Tên phòng", "Thứ", "Ca", "Slot tối đa" }));
 		giaoVuTable.setRowHeight(30);
+		giaoVuTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+			public void valueChanged(ListSelectionEvent event) {
+				for (int i = 0; i < infoPanel.elementList.size(); i++) {
+					infoPanel.elementList.get(i).elementDataLabel
+							.setText(giaoVuTable.getValueAt(giaoVuTable.getSelectedRow(), i).toString());
+				}
+			}
+		});
 		gvListScrollPane.setViewportView(giaoVuTable);
 
 		listPanel.add(gvListScrollPane, gbc.setFill(GridBagConstraints.BOTH).setWeight(1, 1));
@@ -30,17 +43,17 @@ public class GiaoVuHocPhanPanel extends JPanel implements ActionListener {
 		this.add(listPanel, gbc.setFill(GridBagConstraints.BOTH));
 
 		// ------------------------ INFO PANEL --------------------------------
-		JPanel infoPanel = new JPanel(new GridBagLayout());
+		infoPanel = new InfoPanel(new GridBagLayout());
 
 		Dimension nameDim = new Dimension(140, 25), dataDim = InfoPanelElement.defaultDataLabelDim;
-		JPanel maMonPanel = new InfoPanelElement("Mã môn: ", nameDim, dataDim);
-		JPanel tenMonPanel = new InfoPanelElement("Tên môn: ", nameDim, dataDim);
-		JPanel soTinChiPanel = new InfoPanelElement("Số tín chỉ: ", nameDim, dataDim);
-		JPanel gvltPanel = new InfoPanelElement("Giáo viên lý thuyết: ", nameDim, dataDim);
-		JPanel tenPhongHocPanel = new InfoPanelElement("Tên phòng học: ", nameDim, dataDim);
-		JPanel thuPanel = new InfoPanelElement("Thứ: ", nameDim, dataDim);
-		JPanel caPanel = new InfoPanelElement("Ca: ", nameDim, dataDim);
-		JPanel maxSlotPanel = new InfoPanelElement("Số slot tối đa: ", nameDim, dataDim);
+		InfoPanelElement maMonPanel = new InfoPanelElement("Mã môn: ", nameDim, dataDim);
+		InfoPanelElement tenMonPanel = new InfoPanelElement("Tên môn: ", nameDim, dataDim);
+		InfoPanelElement soTinChiPanel = new InfoPanelElement("Số tín chỉ: ", nameDim, dataDim);
+		InfoPanelElement gvltPanel = new InfoPanelElement("Giáo viên lý thuyết: ", nameDim, dataDim);
+		InfoPanelElement tenPhongHocPanel = new InfoPanelElement("Tên phòng học: ", nameDim, dataDim);
+		InfoPanelElement thuPanel = new InfoPanelElement("Thứ: ", nameDim, dataDim);
+		InfoPanelElement caPanel = new InfoPanelElement("Ca: ", nameDim, dataDim);
+		InfoPanelElement maxSlotPanel = new InfoPanelElement("Số slot tối đa: ", nameDim, dataDim);
 
 		gbc = new GBCBuilder(1, 1);
 		infoPanel.add(maMonPanel, gbc.setInsets(0, 0, 5, 0));
@@ -51,6 +64,8 @@ public class GiaoVuHocPhanPanel extends JPanel implements ActionListener {
 		infoPanel.add(thuPanel, gbc.setGrid(1, 6));
 		infoPanel.add(caPanel, gbc.setGrid(1, 7));
 		infoPanel.add(maxSlotPanel, gbc.setGrid(1, 8).setInsets(0));
+		for (int i = 0; i < infoPanel.elementList.size(); i++)
+			infoPanel.elementList.get(i).elementDataLabel.setText(giaoVuTable.getValueAt(0, i).toString());
 
 		JButton xemDanhSachSVBtn = new JButton("Xem danh sách sinh viên đăng ký");
 		infoPanel.add(xemDanhSachSVBtn, gbc.setGrid(1, 9).setInsets(15, 0, 0, 0));

@@ -47,12 +47,13 @@ public class KyDKHPDAO {
 
 	public static Object[][] getObjectMatrix() {
 		List<KyDKHP> ds = layDanhSachKyDKHP();
-		Object[][] data = new Object[ds.size()][4];
+		Object[][] data = new Object[ds.size()][5];
 		for (int i = 0; i < data.length; i++) {
-			data[i][0] = ds.get(i).getKyDKHPID().getHocKi().getTenHocKi();
-			data[i][1] = ds.get(i).getKyDKHPID().getLan();
-			data[i][2] = ds.get(i).getNgayBatDau();
-			data[i][3] = ds.get(i).getNgayKetThuc();
+			data[i][0] = ds.get(i).getKyDKHPID().getHocKi().getNamHoc();
+			data[i][1] = ds.get(i).getKyDKHPID().getHocKi().getTenHocKi();
+			data[i][2] = ds.get(i).getKyDKHPID().getLan();
+			data[i][3] = ds.get(i).getNgayBatDau();
+			data[i][4] = ds.get(i).getNgayKetThuc();
 		}
 
 		return data;

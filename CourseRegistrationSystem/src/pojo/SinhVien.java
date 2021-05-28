@@ -8,13 +8,15 @@ public class SinhVien {
 	private String hoTen;
 	private String gioiTinh;
 	private Date ngSinh;
+	private String khoa;
 
-	public SinhVien(int mssv, TaiKhoan taiKhoan, String hoTen, String gioiTinh, Date ngSinh) {
+	public SinhVien(int mssv, TaiKhoan taiKhoan, String hoTen, String gioiTinh, Date ngSinh, String khoa) {
 		this.mssv = mssv;
 		this.taiKhoan = taiKhoan;
 		this.hoTen = hoTen;
 		this.gioiTinh = gioiTinh;
 		this.ngSinh = ngSinh;
+		this.khoa = khoa;
 	}
 
 	public SinhVien() {
@@ -62,5 +64,13 @@ public class SinhVien {
 
 	public void setNgSinh(Date ngSinh) {
 		this.ngSinh = ngSinh;
+	}
+
+	public String getKhoa() {
+		return khoa;
+	}
+
+	public void setKhoa(String khoa) {
+		this.khoa = khoa;
 	}
 }

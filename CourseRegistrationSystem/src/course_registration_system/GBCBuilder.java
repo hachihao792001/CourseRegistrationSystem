@@ -43,5 +43,10 @@ public class GBCBuilder extends GridBagConstraints {
 		this.insets = new Insets(top, left, bottom, right);
 		return this;
 	}
+	
+	public GBCBuilder setAnchor(int anchor) {
+		this.anchor = anchor;
+		return this;
+	}
 
 }

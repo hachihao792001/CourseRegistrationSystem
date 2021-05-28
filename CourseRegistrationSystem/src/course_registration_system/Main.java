@@ -18,7 +18,7 @@ public class Main {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		new MainScreen();
+		new LoginScreen();
 	}
 
 	public static void main(String args[]) throws IOException {

@@ -44,4 +44,17 @@ public class GiaoVuDAO {
 		}
 		return ds;
 	}
+	
+	public static Object[][] getObjectMatrix() {
+		List<GiaoVu> ds = layDanhSachGiaoVu();
+		Object[][] data = new Object[ds.size()][4];
+		for (int i = 0; i < data.length; i++) {
+			data[i][0] = ds.get(i).getTaiKhoan().getTenTaiKhoan();
+			data[i][1] = ds.get(i).getTenGiaoVu();
+			data[i][2] = ds.get(i).getGioiTinh();
+			data[i][3] = ds.get(i).getNgSinh();
+		}
+
+		return data;
+	}
 }

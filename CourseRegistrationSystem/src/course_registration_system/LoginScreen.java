@@ -104,19 +104,19 @@ public class LoginScreen extends JFrame implements ActionListener {
 		switch (e.getActionCommand()) {
 		case "login":
 			List<TaiKhoan> taiKhoans = TaiKhoanDAO.layDanhSachTaiKhoan();
-			boolean correctAcc = false;
+			TaiKhoan loginAcc = null;
 			for (TaiKhoan taiKhoan : taiKhoans) {
 				if (taiKhoan.getTenTaiKhoan().equals(accText.getText())) {
 					if (taiKhoan.getMatKhau().equals(passText.getText()))
-						correctAcc = true;
+						loginAcc = taiKhoan;
 					break;
 				}
 			}
 
-			if (correctAcc) {
+			if (loginAcc != null) {
 				setVisible(false);
 				dispose();
-				new MainScreen();
+				new MainScreen(loginAcc);
 			} else
 				JOptionPane.showMessageDialog(this, "Tài khoản hoặc mật khẩu không đúng", "Lỗi đăng nhập",
 						JOptionPane.WARNING_MESSAGE, null);

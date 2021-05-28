@@ -3,7 +3,7 @@
 Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
 	<class catalog="qlhocphan" name="pojo.SinhVien" table="SinhVien">
-		
+
 		<id name="mssv" column="Mssv" type="integer">
 			<generator class="identity" />
 		</id>
@@ -21,7 +21,9 @@ Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd
 		<property name="ngSinh" type="date">
 			<column length="10" name="NgSinh" />
 		</property>
-
+		<property name="khoa" type="string">
+			<column length="30" name="Khoa" />
+		</property>
 
 	</class>
 </hibernate-mapping>
