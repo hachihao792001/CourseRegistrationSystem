@@ -1,9 +1,15 @@
 package course_registration_system;
 
+import java.awt.CardLayout;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 import javax.swing.*;
+
+import daos.TaiKhoanDAO;
+import pojo.TaiKhoan;
 
 public class MainScreen extends JFrame implements ActionListener {
 
@@ -11,7 +17,8 @@ public class MainScreen extends JFrame implements ActionListener {
 	private JTabbedPane giaoVuTabbedPane;
 
 	public MainScreen() {
-		JPanel mainContent = new JPanel();
+		JPanel mainContent = new JPanel(new CardLayout());
+
 		giaoVuTabbedPane = new JTabbedPane();
 		giaoVuTabbedPane.addTab("Tài khoản", new GiaoVuTaiKhoanPanel());
 		giaoVuTabbedPane.addTab("Môn học", new GiaoVuMonHocPanel());
@@ -19,7 +26,7 @@ public class MainScreen extends JFrame implements ActionListener {
 		giaoVuTabbedPane.addTab("Lớp học", new GiaoVuLopHocPanel());
 		giaoVuTabbedPane.addTab("Kỳ đăng ký học phần", new GiaoVuKyDKHPPanel());
 		giaoVuTabbedPane.addTab("Học phần", new GiaoVuHocPhanPanel());
-		
+
 		mainContent.add(giaoVuTabbedPane, "giaoVuCard");
 
 		this.setTitle("Phần mềm quản lí học sinh");
@@ -31,7 +38,6 @@ public class MainScreen extends JFrame implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
 
 	}
 }

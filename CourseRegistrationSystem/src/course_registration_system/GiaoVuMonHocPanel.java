@@ -7,6 +7,8 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
+import daos.MonHocDAO;
+
 public class GiaoVuMonHocPanel extends JPanel implements ActionListener {
 	private static final long serialVersionUID = 1L;
 
@@ -15,21 +17,17 @@ public class GiaoVuMonHocPanel extends JPanel implements ActionListener {
 		GBCBuilder gbc = new GBCBuilder(1, 1);
 
 		// ------------------------ LIST PANEL --------------------------------
-		JPanel listPanel = new JPanel();
+		JPanel listPanel = new JPanel(new GridBagLayout());
 		JScrollPane gvListScrollPane = new JScrollPane();
 		JTable giaoVuTable = new JTable();
-		giaoVuTable
-				.setModel(new DefaultTableModel(
-						new Object[][] { { null, null, null, null }, { null, null, null, null },
-								{ null, null, null, null }, { null, null, null, null } },
-						new String[] { "Title 1", "Title 2", "Title 3", "Title 4" }));
+		giaoVuTable.setModel(new DefaultTableModel(MonHocDAO.getObjectMatrix(),
+				new String[] { "Mã môn học", "Tên môn học", "Số tín chỉ" }));
 		giaoVuTable.setRowHeight(30);
-		gvListScrollPane.setPreferredSize(new Dimension(400, 250));
 		gvListScrollPane.setViewportView(giaoVuTable);
 
-		listPanel.add(gvListScrollPane);
+		listPanel.add(gvListScrollPane, gbc.setFill(GridBagConstraints.BOTH).setWeight(1, 1));
 		listPanel.setBorder(BorderFactory.createTitledBorder("Danh sách môn học"));
-		this.add(listPanel, gbc.setFill(GridBagConstraints.BOTH));
+		this.add(listPanel, gbc.setFill(GridBagConstraints.BOTH).setWeight(1, 1));
 
 		// ------------------------ INFO PANEL --------------------------------
 		JPanel infoPanel = new JPanel(new GridBagLayout());
@@ -39,10 +37,12 @@ public class GiaoVuMonHocPanel extends JPanel implements ActionListener {
 		JPanel tenMHPanel = new InfoPanelElement("Tên môn học: ", nameDim, dataDim);
 		JPanel soTinChiPanel = new InfoPanelElement("Số tín chỉ: ", nameDim, dataDim);
 
+		gbc = new GBCBuilder(1, 1);
 		infoPanel.add(maMHPanel, gbc.setInsets(0, 0, 30, 0));
 		infoPanel.add(tenMHPanel, gbc.setGrid(1, 2));
 		infoPanel.add(soTinChiPanel, gbc.setGrid(1, 3).setInsets(0));
 
+		infoPanel.setPreferredSize(new Dimension(200, 200));
 		infoPanel.setBorder(BorderFactory.createTitledBorder("Thông tin"));
 		this.add(infoPanel, new GBCBuilder(2, 1).setSpan(1, 2).setFill(GridBagConstraints.BOTH).setInsets(0, 10, 0, 0));
 

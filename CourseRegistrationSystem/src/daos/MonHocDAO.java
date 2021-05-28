@@ -39,4 +39,16 @@ public class MonHocDAO {
 		}
 		return ds;
 	}
+
+	public static Object[][] getObjectMatrix() {
+		List<MonHoc> ds = layDanhSachMonHoc();
+		Object[][] data = new Object[ds.size()][3];
+		for (int i = 0; i < data.length; i++) {
+			data[i][0] = ds.get(i).getMaMH();
+			data[i][1] = ds.get(i).getTenMH();
+			data[i][2] = ds.get(i).getSoTinChi();
+		}
+
+		return data;
+	}
 }

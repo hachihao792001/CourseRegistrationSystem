@@ -4,13 +4,15 @@ Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd
 <hibernate-mapping>
 	<class catalog="qlhocphan" name="pojo.KyDKHP" table="KyDKHP">
 
-		<id name="maKyDKHP" column="MaKyDKHP" type="integer">
-			<generator class="identity" />
-		</id>
-		
-		<many-to-one class="pojo.HocKi" name="hocKi" fetch="select">
-			<column length="3" name="maHK" not-null="true" />
-		</many-to-one>
+		<composite-id name="kyDKHPID" class="pojo.KyDKHP$KyDKHPID">
+
+			<key-many-to-one name="hocKi" class="pojo.HocKi">
+				<column length="3" name="maHK" not-null="true" />
+			</key-many-to-one>
+			
+			<key-property name="lan" column="Lan" type="int"/>
+
+		</composite-id>
 
 		<property name="ngayBatDau" type="date">
 			<column length="10" name="NgayBatDau" />

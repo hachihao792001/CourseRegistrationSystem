@@ -8,7 +8,6 @@ public class GiaoVien {
 	}
 
 	public GiaoVien(int maGV, String tenGV) {
-		super();
 		this.maGV = maGV;
 		this.tenGV = tenGV;
 	}
@@ -28,7 +27,4 @@ public class GiaoVien {
 	public void setTenGV(String tenGV) {
 		this.tenGV = tenGV;
 	}
-
-	
-
 }

@@ -15,8 +15,8 @@ public class HocDAO {
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		try {
 			h = (Hoc) session.get(Hoc.class, maHoc);
-			Hibernate.initialize(h.getSinhVien());
-			Hibernate.initialize(h.getLopHoc());
+			Hibernate.initialize(h.getHocID().getSinhVien());
+			Hibernate.initialize(h.getHocID().getLopHoc());
 		} catch (HibernateException ex) {
 			// Log the exception
 			System.err.println(ex);
@@ -35,8 +35,8 @@ public class HocDAO {
 			Query<Hoc> query = session.createQuery(hql);
 			ds = query.list();
 			for (Hoc h : ds) {
-				Hibernate.initialize(h.getSinhVien());
-				Hibernate.initialize(h.getLopHoc());
+				Hibernate.initialize(h.getHocID().getSinhVien());
+				Hibernate.initialize(h.getHocID().getLopHoc());
 			}
 
 		} catch (HibernateException ex) {

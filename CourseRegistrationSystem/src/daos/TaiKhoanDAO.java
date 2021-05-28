@@ -25,4 +25,16 @@ public class TaiKhoanDAO {
 		}
 		return ds;
 	}
+
+	public static Object[][] getObjectMatrix() {
+		List<TaiKhoan> ds = layDanhSachTaiKhoan();
+		Object[][] data = new Object[ds.size()][3];
+		for (int i = 0; i < data.length; i++) {
+			data[i][0] = ds.get(i).getTenTaiKhoan();
+			data[i][1] = ds.get(i).getMatKhau();
+			data[i][2] = ds.get(i).getLoai();
+		}
+
+		return data;
+	}
 }

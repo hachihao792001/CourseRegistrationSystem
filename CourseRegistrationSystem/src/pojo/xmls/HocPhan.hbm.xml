@@ -30,7 +30,9 @@ Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd
 		</property>
 
 		<many-to-one class="pojo.KyDKHP" name="kyDKHP" fetch="select">
-			<column name="MaKyDKHP" not-null="true" />
+			<column name="MaHK" not-null="true" />
+			<column name="Lan" not-null="true" />
 		</many-to-one>
+
 	</class>
 </hibernate-mapping>

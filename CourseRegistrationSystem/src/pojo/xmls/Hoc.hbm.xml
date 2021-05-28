@@ -4,17 +4,17 @@ Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd
 <hibernate-mapping>
 	<class catalog="qlhocphan" name="pojo.Hoc" table="Hoc">
 
-		<id name="maHoc" column="MaHoc" type="integer">
-			<generator class="identity" />
-		</id>
+		<composite-id name="hocID" class="pojo.Hoc$HocID">
 
-		<many-to-one class="pojo.SinhVien" name="sinhVien" fetch="select">
-			<column length="8" name="Mssv" not-null="true" />
-		</many-to-one>
+			<key-many-to-one name="sinhVien" class="pojo.SinhVien">
+				<column length="8" name="Mssv" not-null="true" />
+			</key-many-to-one>
 
-		<many-to-one class="pojo.LopHoc" name="lopHoc" fetch="select">
-			<column length="7" name="MaLop" not-null="true" />
-		</many-to-one>
+			<key-many-to-one name="lopHoc" class="pojo.LopHoc">
+				<column length="7" name="MaLop" not-null="true" />
+			</key-many-to-one>
+
+		</composite-id>
 
 	</class>
 </hibernate-mapping>

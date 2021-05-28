@@ -3,12 +3,11 @@
 <hibernate-configuration>
 	<session-factory>
 		<property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
-		<property name="hibernate.connection.driver_class">
-	 com.mysql.jdbc.Driver
-	 </property>
+		<property name="hibernate.connection.driver_class"> com.mysql.jdbc.Driver </property>
 		<property name="hibernate.connection.url">jdbc:mysql://localhost:3306/qlhocphan</property>
 		<property name="hibernate.connection.username">root</property>
 		<property name="hibernate.connection.password">Hao0971196883</property>
+
 		<mapping resource="pojo/xmls/TaiKhoan.hbm.xml" />
 		<mapping resource="pojo/xmls/SinhVien.hbm.xml" />
 		<mapping resource="pojo/xmls/GiaoVu.hbm.xml" />

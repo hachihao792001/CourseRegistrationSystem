@@ -7,6 +7,8 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
+import daos.HocPhanDAO;
+
 public class GiaoVuHocPhanPanel extends JPanel implements ActionListener {
 	private static final long serialVersionUID = 1L;
 
@@ -15,19 +17,15 @@ public class GiaoVuHocPhanPanel extends JPanel implements ActionListener {
 		GBCBuilder gbc = new GBCBuilder(1, 1);
 
 		// ------------------------ LIST PANEL --------------------------------
-		JPanel listPanel = new JPanel();
+		JPanel listPanel = new JPanel(new GridBagLayout());
 		JScrollPane gvListScrollPane = new JScrollPane();
 		JTable giaoVuTable = new JTable();
-		giaoVuTable
-				.setModel(new DefaultTableModel(
-						new Object[][] { { null, null, null, null }, { null, null, null, null },
-								{ null, null, null, null }, { null, null, null, null } },
-						new String[] { "Title 1", "Title 2", "Title 3", "Title 4" }));
+		giaoVuTable.setModel(new DefaultTableModel(HocPhanDAO.getObjectMatrix(),
+				new String[] { "Mã môn học", "Giáo viên lý thuyết", "Tên phòng", "Thứ", "Ca", "Slot tối đa" }));
 		giaoVuTable.setRowHeight(30);
-		gvListScrollPane.setPreferredSize(new Dimension(400, 250));
 		gvListScrollPane.setViewportView(giaoVuTable);
 
-		listPanel.add(gvListScrollPane);
+		listPanel.add(gvListScrollPane, gbc.setFill(GridBagConstraints.BOTH).setWeight(1, 1));
 		listPanel.setBorder(BorderFactory.createTitledBorder("Danh sách học phần"));
 		this.add(listPanel, gbc.setFill(GridBagConstraints.BOTH));
 
@@ -44,6 +42,7 @@ public class GiaoVuHocPhanPanel extends JPanel implements ActionListener {
 		JPanel caPanel = new InfoPanelElement("Ca: ", nameDim, dataDim);
 		JPanel maxSlotPanel = new InfoPanelElement("Số slot tối đa: ", nameDim, dataDim);
 
+		gbc = new GBCBuilder(1, 1);
 		infoPanel.add(maMonPanel, gbc.setInsets(0, 0, 5, 0));
 		infoPanel.add(tenMonPanel, gbc.setGrid(1, 2));
 		infoPanel.add(soTinChiPanel, gbc.setGrid(1, 3));
@@ -52,15 +51,15 @@ public class GiaoVuHocPhanPanel extends JPanel implements ActionListener {
 		infoPanel.add(thuPanel, gbc.setGrid(1, 6));
 		infoPanel.add(caPanel, gbc.setGrid(1, 7));
 		infoPanel.add(maxSlotPanel, gbc.setGrid(1, 8).setInsets(0));
-		
+
 		JButton xemDanhSachSVBtn = new JButton("Xem danh sách sinh viên đăng ký");
-		infoPanel.add(xemDanhSachSVBtn, gbc.setGrid(1, 9).setInsets(15, 70, 0, 70));
+		infoPanel.add(xemDanhSachSVBtn, gbc.setGrid(1, 9).setInsets(15, 0, 0, 0));
 
 		infoPanel.setBorder(BorderFactory.createTitledBorder("Thông tin"));
 		this.add(infoPanel, new GBCBuilder(2, 1).setSpan(1, 2).setFill(GridBagConstraints.BOTH).setInsets(0, 10, 0, 0));
 
 		// ------------------------ BUTTON PANEL --------------------------------
-		JPanel buttonPanel = new JPanel();
+		JPanel buttonPanel = new JPanel(new GridBagLayout());
 
 		JButton findHocPhanBtn = new JButton();
 		findHocPhanBtn.setText("Tìm học phần");

@@ -7,29 +7,28 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
+import daos.TaiKhoanDAO;
+
 public class GiaoVuTaiKhoanPanel extends JPanel implements ActionListener {
 	private static final long serialVersionUID = 1L;
 
 	public GiaoVuTaiKhoanPanel() {
+
 		this.setLayout(new GridBagLayout());
 		GBCBuilder gbc = new GBCBuilder(1, 1);
 
 		// ------------------------ LIST PANEL --------------------------------
-		JPanel listPanel = new JPanel();
+		JPanel listPanel = new JPanel(new GridBagLayout());
 		JScrollPane gvListScrollPane = new JScrollPane();
 		JTable giaoVuTable = new JTable();
-		giaoVuTable
-				.setModel(new DefaultTableModel(
-						new Object[][] { { null, null, null, null }, { null, null, null, null },
-								{ null, null, null, null }, { null, null, null, null } },
-						new String[] { "Title 1", "Title 2", "Title 3", "Title 4" }));
+		giaoVuTable.setModel(
+				new DefaultTableModel(TaiKhoanDAO.getObjectMatrix(), new String[] { "Tài khoản", "Mật khẩu", "Loại" }));
 		giaoVuTable.setRowHeight(30);
-		gvListScrollPane.setPreferredSize(new Dimension(400, 250));
 		gvListScrollPane.setViewportView(giaoVuTable);
 
-		listPanel.add(gvListScrollPane);
+		listPanel.add(gvListScrollPane, gbc.setFill(GridBagConstraints.BOTH).setWeight(1, 1));
 		listPanel.setBorder(BorderFactory.createTitledBorder("Danh sách giáo vụ"));
-		this.add(listPanel, gbc.setFill(GridBagConstraints.BOTH));
+		this.add(listPanel, gbc.setFill(GridBagConstraints.BOTH).setWeight(1, 1));
 
 		// ------------------------ INFO PANEL --------------------------------
 		JPanel infoPanel = new JPanel(new GridBagLayout());
@@ -40,6 +39,7 @@ public class GiaoVuTaiKhoanPanel extends JPanel implements ActionListener {
 		JPanel gioiTinhPanel = new InfoPanelElement("Giới tính: ", nameDim, dataDim);
 		JPanel ngSinhPanel = new InfoPanelElement("Ngày sinh: ", nameDim, dataDim);
 
+		gbc = new GBCBuilder(1, 1);
 		infoPanel.add(maGVPanel, gbc.setInsets(0, 0, 15, 0));
 		infoPanel.add(tenGVPanel, gbc.setGrid(1, 2));
 		infoPanel.add(gioiTinhPanel, gbc.setGrid(1, 3));

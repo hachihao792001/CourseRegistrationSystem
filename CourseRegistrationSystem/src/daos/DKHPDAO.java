@@ -15,9 +15,9 @@ public class DKHPDAO {
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		try {
 			h = (DKHP) session.get(DKHP.class, maDKHP);
-			Hibernate.initialize(h.getSinhVien());
-			Hibernate.initialize(h.getHocPhan());
-			Hibernate.initialize(h.getHocPhan().getMonHoc());
+			Hibernate.initialize(h.getDkhpID().getSinhVien());
+			Hibernate.initialize(h.getDkhpID().getHocPhan());
+			Hibernate.initialize(h.getDkhpID().getHocPhan().getMonHoc());
 			Hibernate.initialize(h.getGvlt());
 		} catch (HibernateException ex) {
 			// Log the exception
@@ -37,9 +37,9 @@ public class DKHPDAO {
 			Query<DKHP> query = session.createQuery(hql);
 			ds = query.list();
 			for (DKHP h : ds) {
-				Hibernate.initialize(h.getSinhVien());
-				Hibernate.initialize(h.getHocPhan());
-				Hibernate.initialize(h.getHocPhan().getMonHoc());
+				Hibernate.initialize(h.getDkhpID().getSinhVien());
+				Hibernate.initialize(h.getDkhpID().getHocPhan());
+				Hibernate.initialize(h.getDkhpID().getHocPhan().getMonHoc());
 				Hibernate.initialize(h.getGvlt());
 			}
 

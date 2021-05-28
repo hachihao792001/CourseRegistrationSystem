@@ -13,7 +13,9 @@ public class HocPhan {
 	public HocPhan() {
 	}
 
-	public HocPhan(int maHP, MonHoc monHoc, GiaoVien gvlt, String tenPhong, int thu, int ca, int slotToiDa, KyDKHP kyDKHP) {
+	public HocPhan(int maHP, MonHoc monHoc, GiaoVien gvlt, String tenPhong, int thu, int ca, int slotToiDa,
+			KyDKHP kyDKHP) {
+		super();
 		this.maHP = maHP;
 		this.monHoc = monHoc;
 		this.gvlt = gvlt;

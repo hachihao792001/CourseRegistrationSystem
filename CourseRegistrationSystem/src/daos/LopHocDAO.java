@@ -40,4 +40,17 @@ public class LopHocDAO {
 		}
 		return ds;
 	}
+	
+	public static Object[][] getObjectMatrix() {
+		List<LopHoc> ds = layDanhSachLopHoc();
+		Object[][] data = new Object[ds.size()][4];
+		for (int i = 0; i < data.length; i++) {
+			data[i][0] = ds.get(i).getMaLop();
+			data[i][1] = ds.get(i).getTongSoSV();
+			data[i][2] = ds.get(i).getTongSoNam();
+			data[i][3] = ds.get(i).getTongSoNu();
+		}
+
+		return data;
+	}
 }

@@ -7,6 +7,8 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
+import daos.KyDKHPDAO;
+
 public class GiaoVuKyDKHPPanel extends JPanel implements ActionListener {
 	private static final long serialVersionUID = 1L;
 
@@ -15,21 +17,17 @@ public class GiaoVuKyDKHPPanel extends JPanel implements ActionListener {
 		GBCBuilder gbc = new GBCBuilder(1, 1);
 
 		// ------------------------ LIST PANEL --------------------------------
-		JPanel listPanel = new JPanel();
+		JPanel listPanel = new JPanel(new GridBagLayout());
 		JScrollPane gvListScrollPane = new JScrollPane();
 		JTable giaoVuTable = new JTable();
-		giaoVuTable
-				.setModel(new DefaultTableModel(
-						new Object[][] { { null, null, null, null }, { null, null, null, null },
-								{ null, null, null, null }, { null, null, null, null } },
-						new String[] { "Title 1", "Title 2", "Title 3", "Title 4" }));
+		giaoVuTable.setModel(new DefaultTableModel(KyDKHPDAO.getObjectMatrix(),
+				new String[] { "Học kì", "Ngày bắt đầu", "Ngày kết thúc" }));
 		giaoVuTable.setRowHeight(30);
-		gvListScrollPane.setPreferredSize(new Dimension(400, 250));
 		gvListScrollPane.setViewportView(giaoVuTable);
 
-		listPanel.add(gvListScrollPane);
+		listPanel.add(gvListScrollPane, gbc.setFill(GridBagConstraints.BOTH).setWeight(1, 1));
 		listPanel.setBorder(BorderFactory.createTitledBorder("Danh sách học kì"));
-		this.add(listPanel, gbc.setFill(GridBagConstraints.BOTH));
+		this.add(listPanel, gbc.setFill(GridBagConstraints.BOTH).setWeight(1, 1));
 
 		// ------------------------ INFO PANEL --------------------------------
 		JPanel infoPanel = new JPanel(new GridBagLayout());
@@ -40,6 +38,7 @@ public class GiaoVuKyDKHPPanel extends JPanel implements ActionListener {
 		JPanel ngayBatDauPanel = new InfoPanelElement("Ngày bắt đầu: ", nameDim, dataDim);
 		JPanel ngayKetThucPanel = new InfoPanelElement("Ngày kết thúc: ", nameDim, dataDim);
 
+		gbc = new GBCBuilder(1, 1);
 		infoPanel.add(tenKyDKHPPanel, gbc.setInsets(0, 0, 20, 20));
 		infoPanel.add(namHocPanel, gbc.setGrid(1, 2));
 		infoPanel.add(ngayBatDauPanel, gbc.setGrid(1, 3));
