@@ -77,6 +77,7 @@ public class LoginScreen extends JFrame implements ActionListener {
 		loginButton.setText("Đăng nhập");
 		loginButton.setActionCommand("login");
 		loginButton.addActionListener(this);
+		getRootPane().setDefaultButton(loginButton);
 		gridBagConstraints = new GridBagConstraints();
 		gridBagConstraints.gridx = 1;
 		gridBagConstraints.gridy = 4;

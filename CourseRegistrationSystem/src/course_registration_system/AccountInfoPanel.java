@@ -1,6 +1,7 @@
 package course_registration_system;
 
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
@@ -20,6 +21,8 @@ public class AccountInfoPanel extends JPanel implements ActionListener {
 	public AccountInfoPanel(TaiKhoan tk) {
 		this.setLayout(new GridBagLayout());
 		this.tk = tk;
+		this.setBorder(BorderFactory.createTitledBorder("Thông tin tài khoản"));
+
 		GBCBuilder gbc;
 		JButton doiMKButton = new JButton("Đổi mật khẩu");
 		doiMKButton.setActionCommand("pass");
@@ -31,20 +34,18 @@ public class AccountInfoPanel extends JPanel implements ActionListener {
 		if (tk.getLoai().equals("GV")) {
 
 			GiaoVu gvu = TaiKhoanDAO.layGiaoVu(tk);
-			JLabel taiKhoanLabel = new JLabel("Tài khoản: " + gvu.getTaiKhoan().getTenTaiKhoan());
-			JLabel maGVuLabel = new JLabel("Mã giáo vụ: " + gvu.getMaGVu());
-			JLabel tenGVuLabel = new JLabel("Tên giáo vụ: " + gvu.getTenGiaoVu());
-			JLabel gioiTinhLabel = new JLabel("Giới tính: " + gvu.getGioiTinh());
-			JLabel ngaySinhLabel = new JLabel("Ngày sinh: " + gvu.getNgSinh());
-
-			gbc = new GBCBuilder(1, 1).setAnchor(GridBagConstraints.LINE_START).setInsets(5);
-			this.add(taiKhoanLabel, gbc);
-			this.add(maGVuLabel, gbc.setGrid(1, 2));
-			this.add(tenGVuLabel, gbc.setGrid(1, 3));
-			this.add(gioiTinhLabel, gbc.setGrid(1, 4));
-			this.add(ngaySinhLabel, gbc.setGrid(1, 5));
-			this.add(doiMKButton, gbc.setGrid(1, 6).setAnchor(GridBagConstraints.CENTER));
-			this.add(dangXuatButton, gbc.setGrid(1, 7).setAnchor(GridBagConstraints.CENTER));
+			JList<String> accountInfoElementList = new JList<String>(
+					new String[] { "Tài khoản: " + gvu.getTaiKhoan().getTenTaiKhoan(), "Mã giáo vụ: " + gvu.getMaGVu(),
+							"Tên giáo vụ: " + gvu.getTenGiaoVu(), "Giới tính: " + gvu.getGioiTinh(),
+							"Ngày sinh: " + gvu.getNgSinh() });
+			accountInfoElementList.setFont(new Font("Dialog", Font.BOLD, 14));
+			accountInfoElementList.setBackground(null);
+			accountInfoElementList.setFixedCellHeight(40);
+			
+			gbc = new GBCBuilder(1, 1).setFill(GridBagConstraints.BOTH);
+			this.add(accountInfoElementList, gbc.setGrid(1, 1).setSpan(2, 1).setWeight(1, 0).setInsets(0, 0, 10, 0));
+			this.add(doiMKButton, gbc.setGrid(1, 2).setSpan(1, 1));
+			this.add(dangXuatButton, gbc.setGrid(2, 2));
 		}
 
 		if (tk.getLoai().equals("SV")) {
