@@ -5,12 +5,13 @@ import java.util.List;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
 import pojo.*;
 
 public class GiaoVuDAO {
-	public static GiaoVu layThongTinGiaoVu(String maGVu) {
+	public static GiaoVu layThongTinGiaoVu(int maGVu) {
 		GiaoVu gv = null;
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		try {
@@ -43,6 +44,75 @@ public class GiaoVuDAO {
 			session.close();
 		}
 		return ds;
+	}
+	
+	public static boolean themGiaoVu(GiaoVu gvu) {
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		if (GiaoVuDAO.layThongTinGiaoVu(gvu.getMaGVu()) != null) {
+			return false;
+		}
+		Transaction transaction = null;
+		try {
+			transaction = session.beginTransaction();
+			session.save(gvu);
+			transaction.commit();
+
+		} catch (HibernateException ex) {
+			try {
+				transaction.rollback();
+			} catch (IllegalStateException e) {
+				e.printStackTrace();
+			}
+			System.err.println(ex);
+		} finally {
+			session.close();
+		}
+		return true;
+	}
+
+	public static boolean capNhatThongTinGiaoVu(GiaoVu gvu) {
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		if (GiaoVuDAO.layThongTinGiaoVu(gvu.getMaGVu()) == null) {
+			return false;
+		}
+		Transaction transaction = null;
+		try {
+			transaction = session.beginTransaction();
+			session.update(gvu);
+			transaction.commit();
+		} catch (HibernateException ex) {
+			// Log the exception
+			try {
+				transaction.rollback();
+			} catch (IllegalStateException e) {
+				e.printStackTrace();
+			}
+			System.err.println(ex);
+		} finally {
+			session.close();
+		}
+		return true;
+	}
+
+	public static boolean xoaGiaoVu(int maGiaoVu) {
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		GiaoVu gvu = GiaoVuDAO.layThongTinGiaoVu(maGiaoVu);
+		if (gvu == null) {
+			return false;
+		}
+		Transaction transaction = null;
+		try {
+			transaction = session.beginTransaction();
+			session.delete(gvu);
+			transaction.commit();
+		} catch (HibernateException ex) {
+			// Log the exception
+			transaction.rollback();
+			System.err.println(ex);
+		} finally {
+			session.close();
+		}
+		return true;
 	}
 	
 	public static Object[][] getObjectMatrix() {

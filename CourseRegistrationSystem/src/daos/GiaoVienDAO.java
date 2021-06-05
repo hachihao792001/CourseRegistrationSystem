@@ -4,12 +4,13 @@ import java.util.List;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
 import pojo.*;
 
 public class GiaoVienDAO {
-	public static GiaoVien layThongTinGiaoVien(String maGV) {
+	public static GiaoVien layThongTinGiaoVien(int maGV) {
 		GiaoVien gv = null;
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		try {
@@ -39,5 +40,74 @@ public class GiaoVienDAO {
 			session.close();
 		}
 		return ds;
+	}
+	
+	public static boolean themGiaoVien(GiaoVien gv) {
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		if (GiaoVienDAO.layThongTinGiaoVien(gv.getMaGV()) != null) {
+			return false;
+		}
+		Transaction transaction = null;
+		try {
+			transaction = session.beginTransaction();
+			session.save(gv);
+			transaction.commit();
+
+		} catch (HibernateException ex) {
+			try {
+				transaction.rollback();
+			} catch (IllegalStateException e) {
+				e.printStackTrace();
+			}
+			System.err.println(ex);
+		} finally {
+			session.close();
+		}
+		return true;
+	}
+
+	public static boolean capNhatThongTinGiaoVien(GiaoVien gv) {
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		if (GiaoVienDAO.layThongTinGiaoVien(gv.getMaGV()) == null) {
+			return false;
+		}
+		Transaction transaction = null;
+		try {
+			transaction = session.beginTransaction();
+			session.update(gv);
+			transaction.commit();
+		} catch (HibernateException ex) {
+			// Log the exception
+			try {
+				transaction.rollback();
+			} catch (IllegalStateException e) {
+				e.printStackTrace();
+			}
+			System.err.println(ex);
+		} finally {
+			session.close();
+		}
+		return true;
+	}
+
+	public static boolean xoaGiaoVien(int maGiaoVien) {
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		GiaoVien gv = GiaoVienDAO.layThongTinGiaoVien(maGiaoVien);
+		if (gv == null) {
+			return false;
+		}
+		Transaction transaction = null;
+		try {
+			transaction = session.beginTransaction();
+			session.delete(gv);
+			transaction.commit();
+		} catch (HibernateException ex) {
+			// Log the exception
+			transaction.rollback();
+			System.err.println(ex);
+		} finally {
+			session.close();
+		}
+		return true;
 	}
 }

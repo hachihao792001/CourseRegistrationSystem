@@ -5,12 +5,14 @@ import java.util.List;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
 import pojo.*;
+import pojo.KyDKHP.KyDKHPID;
 
 public class KyDKHPDAO {
-	public static KyDKHP layThongTinKyDKHP(String maKyDKHP) {
+	public static KyDKHP layThongTinKyDKHP(KyDKHPID maKyDKHP) {
 		KyDKHP kyDKHP = null;
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		try {
@@ -43,6 +45,75 @@ public class KyDKHPDAO {
 			session.close();
 		}
 		return ds;
+	}
+
+	public static boolean themKyDKHP(KyDKHP kyDKHP) {
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		if (KyDKHPDAO.layThongTinKyDKHP(kyDKHP.getKyDKHPID()) != null) {
+			return false;
+		}
+		Transaction transaction = null;
+		try {
+			transaction = session.beginTransaction();
+			session.save(kyDKHP);
+			transaction.commit();
+
+		} catch (HibernateException ex) {
+			try {
+				transaction.rollback();
+			} catch (IllegalStateException e) {
+				e.printStackTrace();
+			}
+			System.err.println(ex);
+		} finally {
+			session.close();
+		}
+		return true;
+	}
+
+	public static boolean capNhatThongTinKyDKHP(KyDKHP kyDKHP) {
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		if (KyDKHPDAO.layThongTinKyDKHP(kyDKHP.getKyDKHPID()) == null) {
+			return false;
+		}
+		Transaction transaction = null;
+		try {
+			transaction = session.beginTransaction();
+			session.update(kyDKHP);
+			transaction.commit();
+		} catch (HibernateException ex) {
+			// Log the exception
+			try {
+				transaction.rollback();
+			} catch (IllegalStateException e) {
+				e.printStackTrace();
+			}
+			System.err.println(ex);
+		} finally {
+			session.close();
+		}
+		return true;
+	}
+
+	public static boolean xoaKyDKHP(KyDKHPID maKyDKHP) {
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		KyDKHP kyDKHP = KyDKHPDAO.layThongTinKyDKHP(maKyDKHP);
+		if (kyDKHP == null) {
+			return false;
+		}
+		Transaction transaction = null;
+		try {
+			transaction = session.beginTransaction();
+			session.delete(kyDKHP);
+			transaction.commit();
+		} catch (HibernateException ex) {
+			// Log the exception
+			transaction.rollback();
+			System.err.println(ex);
+		} finally {
+			session.close();
+		}
+		return true;
 	}
 
 	public static Object[][] getObjectMatrix() {

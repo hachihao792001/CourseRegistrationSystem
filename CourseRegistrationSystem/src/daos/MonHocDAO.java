@@ -4,16 +4,17 @@ import java.util.List;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
 import pojo.*;
 
 public class MonHocDAO {
-	public static MonHoc layThongTinMonHoc(String mssv) {
+	public static MonHoc layThongTinMonHoc(String maMH) {
 		MonHoc sv = null;
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		try {
-			sv = (MonHoc) session.get(MonHoc.class, mssv);
+			sv = (MonHoc) session.get(MonHoc.class, maMH);
 		} catch (HibernateException ex) {
 			// Log the exception
 			System.err.println(ex);
@@ -40,6 +41,75 @@ public class MonHocDAO {
 		return ds;
 	}
 
+	public static boolean themMonHoc(MonHoc mh) {
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		if (MonHocDAO.layThongTinMonHoc(mh.getMaMH()) != null) {
+			return false;
+		}
+		Transaction transaction = null;
+		try {
+			transaction = session.beginTransaction();
+			session.save(mh);
+			transaction.commit();
+
+		} catch (HibernateException ex) {
+			try {
+				transaction.rollback();
+			} catch (IllegalStateException e) {
+				e.printStackTrace();
+			}
+			System.err.println(ex);
+		} finally {
+			session.close();
+		}
+		return true;
+	}
+
+	public static boolean capNhatThongTinMonHoc(MonHoc mh) {
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		if (MonHocDAO.layThongTinMonHoc(mh.getMaMH()) == null) {
+			return false;
+		}
+		Transaction transaction = null;
+		try {
+			transaction = session.beginTransaction();
+			session.update(mh);
+			transaction.commit();
+		} catch (HibernateException ex) {
+			// Log the exception
+			try {
+				transaction.rollback();
+			} catch (IllegalStateException e) {
+				e.printStackTrace();
+			}
+			System.err.println(ex);
+		} finally {
+			session.close();
+		}
+		return true;
+	}
+
+	public static boolean xoaMonHoc(String maMonHoc) {
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		MonHoc mh = MonHocDAO.layThongTinMonHoc(maMonHoc);
+		if (mh == null) {
+			return false;
+		}
+		Transaction transaction = null;
+		try {
+			transaction = session.beginTransaction();
+			session.delete(mh);
+			transaction.commit();
+		} catch (HibernateException ex) {
+			// Log the exception
+			transaction.rollback();
+			System.err.println(ex);
+		} finally {
+			session.close();
+		}
+		return true;
+	}
+	
 	public static Object[][] getObjectMatrix() {
 		List<MonHoc> ds = layDanhSachMonHoc();
 		Object[][] data = new Object[ds.size()][3];

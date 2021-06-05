@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
 import pojo.*;
@@ -27,7 +28,7 @@ public class LopHocDAO {
 		List<LopHoc> ds = null;
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		try {
-			String hql = "select sv from LopHoc sv";
+			String hql = "select lh from LopHoc lh";
 			@SuppressWarnings("unchecked")
 			Query<LopHoc> query = session.createQuery(hql);
 			ds = query.list();
@@ -39,6 +40,75 @@ public class LopHocDAO {
 			session.close();
 		}
 		return ds;
+	}
+	
+	public static boolean themLopHoc(LopHoc lh) {
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		if (LopHocDAO.layThongTinLopHoc(lh.getMaLop()) != null) {
+			return false;
+		}
+		Transaction transaction = null;
+		try {
+			transaction = session.beginTransaction();
+			session.save(lh);
+			transaction.commit();
+
+		} catch (HibernateException ex) {
+			try {
+				transaction.rollback();
+			} catch (IllegalStateException e) {
+				e.printStackTrace();
+			}
+			System.err.println(ex);
+		} finally {
+			session.close();
+		}
+		return true;
+	}
+
+	public static boolean capNhatThongTinLopHoc(LopHoc lh) {
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		if (LopHocDAO.layThongTinLopHoc(lh.getMaLop()) == null) {
+			return false;
+		}
+		Transaction transaction = null;
+		try {
+			transaction = session.beginTransaction();
+			session.update(lh);
+			transaction.commit();
+		} catch (HibernateException ex) {
+			// Log the exception
+			try {
+				transaction.rollback();
+			} catch (IllegalStateException e) {
+				e.printStackTrace();
+			}
+			System.err.println(ex);
+		} finally {
+			session.close();
+		}
+		return true;
+	}
+
+	public static boolean xoaLopHoc(String maLopHoc) {
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		LopHoc lh = LopHocDAO.layThongTinLopHoc(maLopHoc);
+		if (lh == null) {
+			return false;
+		}
+		Transaction transaction = null;
+		try {
+			transaction = session.beginTransaction();
+			session.delete(lh);
+			transaction.commit();
+		} catch (HibernateException ex) {
+			// Log the exception
+			transaction.rollback();
+			System.err.println(ex);
+		} finally {
+			session.close();
+		}
+		return true;
 	}
 	
 	public static Object[][] getObjectMatrix() {

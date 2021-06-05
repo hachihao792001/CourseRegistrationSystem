@@ -5,12 +5,14 @@ import java.util.List;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
 import pojo.*;
+import pojo.DKHP.DKHPID;
 
 public class DKHPDAO {
-	public static DKHP layThongTinDKHP(String maDKHP) {
+	public static DKHP layThongTinDKHP(DKHPID maDKHP) {
 		DKHP h = null;
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		try {
@@ -50,5 +52,74 @@ public class DKHPDAO {
 			session.close();
 		}
 		return ds;
+	}
+
+	public static boolean themDKHP(DKHP dkhp) {
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		if (DKHPDAO.layThongTinDKHP(dkhp.getDkhpID()) != null) {
+			return false;
+		}
+		Transaction transaction = null;
+		try {
+			transaction = session.beginTransaction();
+			session.save(dkhp);
+			transaction.commit();
+
+		} catch (HibernateException ex) {
+			try {
+				transaction.rollback();
+			} catch (IllegalStateException e) {
+				e.printStackTrace();
+			}
+			System.err.println(ex);
+		} finally {
+			session.close();
+		}
+		return true;
+	}
+
+	public static boolean capNhatThongTinDKHP(DKHP dkhp) {
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		if (DKHPDAO.layThongTinDKHP(dkhp.getDkhpID()) == null) {
+			return false;
+		}
+		Transaction transaction = null;
+		try {
+			transaction = session.beginTransaction();
+			session.update(dkhp);
+			transaction.commit();
+		} catch (HibernateException ex) {
+			// Log the exception
+			try {
+				transaction.rollback();
+			} catch (IllegalStateException e) {
+				e.printStackTrace();
+			}
+			System.err.println(ex);
+		} finally {
+			session.close();
+		}
+		return true;
+	}
+
+	public static boolean xoaDKHP(DKHPID maDKHP) {
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		DKHP dkhp = DKHPDAO.layThongTinDKHP(maDKHP);
+		if (dkhp == null) {
+			return false;
+		}
+		Transaction transaction = null;
+		try {
+			transaction = session.beginTransaction();
+			session.delete(dkhp);
+			transaction.commit();
+		} catch (HibernateException ex) {
+			// Log the exception
+			transaction.rollback();
+			System.err.println(ex);
+		} finally {
+			session.close();
+		}
+		return true;
 	}
 }
