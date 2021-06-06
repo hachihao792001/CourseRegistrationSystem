@@ -27,12 +27,12 @@ public class ListPanel extends JPanel {
 		theTable.setRowHeight(30);
 		theTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent event) {
-				for (int i = 0; i < infoPanel.elementList.size(); i++) {
-					infoPanel.elementList.get(i).elementDataLabel
-							.setText(theTable.getValueAt(theTable.getSelectedRow(), i).toString());
-				}
+				for (int i = 0; i < infoPanel.elementDatas.length; i++) 
+					infoPanel.elementDatas[i] = theTable.getValueAt(theTable.getSelectedRow(), i).toString();
+				infoPanel.updateInfo();
 			}
 		});
+		theTable.setRowSelectionInterval(0, 0);
 		theScrollPane.setViewportView(theTable);
 		this.add(theScrollPane,
 				gbc.setSpan(actionButtonTexts.length, 1).setFill(GridBagConstraints.BOTH).setWeight(1, 1));

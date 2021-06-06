@@ -1,5 +1,7 @@
 package daos;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import org.hibernate.Hibernate;
@@ -45,7 +47,7 @@ public class GiaoVuDAO {
 		}
 		return ds;
 	}
-	
+
 	public static boolean themGiaoVu(GiaoVu gvu) {
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		if (GiaoVuDAO.layThongTinGiaoVu(gvu.getMaGVu()) != null) {
@@ -114,7 +116,7 @@ public class GiaoVuDAO {
 		}
 		return true;
 	}
-	
+
 	public static Object[][] getObjectMatrix() {
 		List<GiaoVu> ds = layDanhSachGiaoVu();
 		Object[][] data = new Object[ds.size()][4];
@@ -122,7 +124,7 @@ public class GiaoVuDAO {
 			data[i][0] = ds.get(i).getTaiKhoan().getTenTaiKhoan();
 			data[i][1] = ds.get(i).getTenGiaoVu();
 			data[i][2] = ds.get(i).getGioiTinh();
-			data[i][3] = ds.get(i).getNgSinh();
+			data[i][3] = new SimpleDateFormat("dd/MM/yyyy").format(ds.get(i).getNgSinh());
 		}
 
 		return data;

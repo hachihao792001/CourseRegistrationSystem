@@ -23,12 +23,12 @@ public class MainScreen extends JFrame implements ActionListener {
 		JPanel accountInfoPanel = new AccountInfoPanel(taiKhoan);
 
 		giaoVuTabbedPane = new JTabbedPane();
-		giaoVuTabbedPane.addTab("Tài khoản", new GiaoVuTaiKhoanPanel());
-		giaoVuTabbedPane.addTab("Môn học", new GiaoVuMonHocPanel());
-		giaoVuTabbedPane.addTab("Học kì", new GiaoVuHocKiPanel());
-		giaoVuTabbedPane.addTab("Lớp học", new GiaoVuLopHocPanel());
-		giaoVuTabbedPane.addTab("Kỳ đăng ký học phần", new GiaoVuKyDKHPPanel());
-		giaoVuTabbedPane.addTab("Học phần", new GiaoVuHocPhanPanel());
+		giaoVuTabbedPane.addTab("Tài khoản", new TaiKhoanPanel());
+		giaoVuTabbedPane.addTab("Môn học", new MonHocPanel());
+		giaoVuTabbedPane.addTab("Học kì", new HocKiPanel());
+		giaoVuTabbedPane.addTab("Lớp học", new LopHocPanel());
+		giaoVuTabbedPane.addTab("Kỳ đăng ký học phần", new KyDKHPPanel());
+		giaoVuTabbedPane.addTab("Học phần", new HocPhanPanel());
 
 		JSplitPane mainSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, accountInfoPanel, giaoVuTabbedPane);
 		mainContent.add(mainSplitPane, "giaoVuCard");

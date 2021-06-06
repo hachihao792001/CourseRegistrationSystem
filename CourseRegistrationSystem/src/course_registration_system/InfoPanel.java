@@ -1,40 +1,57 @@
 package course_registration_system;
 
+import java.awt.Font;
 import java.awt.GridBagLayout;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JList;
 import javax.swing.JPanel;
 
 public class InfoPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
-	public List<InfoPanelElement> elementList = new ArrayList<InfoPanelElement>();
 	public JButton actionButton;
 	public int padding = 20, buttonPadding = 10;
-	public Object[] firstRowTable;
 
-	public InfoPanel(List<String> infoPanelElementNames) {
-		super(new GridBagLayout());
+	JList<String> theJList;
+	public String[] elementNames;
+	public String[] elementDatas;
 
-		for (String name : infoPanelElementNames)
-			elementList.add(new InfoPanelElement(name));
+	public InfoPanel(String[] elementNames, String buttonText, ActionListener buttonListener) {
+		this.setLayout(new GridBagLayout());
+		this.elementNames = elementNames;
+		this.elementDatas = new String[elementNames.length];
 
-	}
-
-	public void build() {
 		GBCBuilder gbc = new GBCBuilder(1, 1);
-		for (int i = 0; i < elementList.size(); i++)
-			super.add(elementList.get(i), gbc.setGrid(1, i + 1).setInsets(0, 0, padding, 0));
-		if (actionButton != null)
-			super.add(actionButton, gbc.setGrid(1, elementList.size() + 1).setInsets(buttonPadding, 0, 0, 0));
+		String[] jListStrings = new String[elementNames.length];
+		for (int i = 0; i < elementNames.length; i++)
+			jListStrings[i] = elementNames[i] + elementDatas[i];
 
-		if (firstRowTable != null) {
-			for (int i = 0; i < elementList.size(); i++)
-				elementList.get(i).elementDataLabel.setText(firstRowTable[i].toString());
+		theJList = new JList<String>(jListStrings);
+		theJList.setFont(new Font("Dialog", Font.PLAIN, 14));
+		theJList.setBackground(null);
+		theJList.setFixedCellHeight(40);
+
+		this.add(theJList, gbc.setGrid(1, 1));
+
+		if (buttonText != null) {
+			actionButton = new JButton(buttonText);
+			actionButton.addActionListener(buttonListener);
+			this.add(actionButton, gbc.setGrid(1, 2).setInsets(buttonPadding, 0, 0, 0));
 		}
 
 		this.setBorder(BorderFactory.createTitledBorder("Thông tin"));
+	}
+
+	public void updateInfo() {
+
+		String[] jListStrings = new String[elementNames.length];
+		for (int i = 0; i < elementNames.length; i++)
+			jListStrings[i] = elementNames[i] + elementDatas[i];
+
+		theJList.setListData(jListStrings);
 	}
 }

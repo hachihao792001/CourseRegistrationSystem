@@ -10,23 +10,19 @@ import javax.swing.*;
 
 import daos.HocKiDAO;
 
-public class GiaoVuHocKiPanel extends JPanel implements ActionListener {
+public class HocKiPanel extends JPanel implements ActionListener {
 	private static final long serialVersionUID = 1L;
 
 	ListPanel listPanel;
 	InfoPanel infoPanel;
 
-	public GiaoVuHocKiPanel() {
+	public HocKiPanel() {
 		this.setLayout(new GridBagLayout());
 		GBCBuilder gbc = new GBCBuilder(1, 1);
 
 		// ------------------------ INFO PANEL --------------------------------
-		infoPanel = new InfoPanel(
-				new ArrayList<String>(Arrays.asList("Tên học kì", "Năm học: ", "Ngày bắt đầu: ", "Ngày kết thúc: ")));
-		infoPanel.actionButton = new JButton("Để thành học kì hiện tại");
-		infoPanel.buttonPadding = 25;
-		infoPanel.firstRowTable = HocKiDAO.getObjectMatrix()[0];
-		infoPanel.build();
+		infoPanel = new InfoPanel(new String[] { "Tên học kì: ", "Năm học: ", "Ngày bắt đầu: ", "Ngày kết thúc: " }, "Để thành học kì hiện tại", this);
+		infoPanel.updateInfo();
 
 		// ------------------------ LIST PANEL --------------------------------
 		listPanel = new ListPanel(infoPanel, HocKiDAO.getObjectMatrix(),

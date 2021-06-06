@@ -1,5 +1,6 @@
 package daos;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import org.hibernate.HibernateException;
@@ -41,7 +42,7 @@ public class HocKiDAO {
 		}
 		return ds;
 	}
-	
+
 	public static boolean themHocKi(HocKi hk) {
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		if (HocKiDAO.layThongTinHocKi(hk.getMaHK()) != null) {
@@ -117,8 +118,8 @@ public class HocKiDAO {
 		for (int i = 0; i < data.length; i++) {
 			data[i][0] = ds.get(i).getTenHocKi();
 			data[i][1] = ds.get(i).getNamHoc();
-			data[i][2] = ds.get(i).getNgayBatDau();
-			data[i][3] = ds.get(i).getNgayKetThuc();
+			data[i][2] = new SimpleDateFormat("dd/MM/yyyy").format(ds.get(i).getNgayBatDau());
+			data[i][3] = new SimpleDateFormat("dd/MM/yyyy").format(ds.get(i).getNgayKetThuc());
 		}
 
 		return data;

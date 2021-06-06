@@ -1,5 +1,6 @@
 package daos;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import org.hibernate.Hibernate;
@@ -123,8 +124,8 @@ public class KyDKHPDAO {
 			data[i][0] = ds.get(i).getKyDKHPID().getHocKi().getNamHoc();
 			data[i][1] = ds.get(i).getKyDKHPID().getHocKi().getTenHocKi();
 			data[i][2] = ds.get(i).getKyDKHPID().getLan();
-			data[i][3] = ds.get(i).getNgayBatDau();
-			data[i][4] = ds.get(i).getNgayKetThuc();
+			data[i][3] = new SimpleDateFormat("dd/MM/yyyy").format(ds.get(i).getNgayBatDau());
+			data[i][4] = new SimpleDateFormat("dd/MM/yyyy").format(ds.get(i).getNgayKetThuc());
 		}
 
 		return data;

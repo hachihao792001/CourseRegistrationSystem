@@ -6,9 +6,12 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import javax.swing.*;
 
+import daos.GiaoVuDAO;
+import daos.SinhVienDAO;
 import daos.TaiKhoanDAO;
 import pojo.*;
 
@@ -17,6 +20,8 @@ public class AccountInfoPanel extends JPanel implements ActionListener {
 	private static final long serialVersionUID = 1L;
 
 	TaiKhoan tk;
+	GiaoVu gvu;
+	SinhVien sv;
 
 	public AccountInfoPanel(TaiKhoan tk) {
 		this.setLayout(new GridBagLayout());
@@ -27,47 +32,40 @@ public class AccountInfoPanel extends JPanel implements ActionListener {
 		JButton doiMKButton = new JButton("Đổi mật khẩu");
 		doiMKButton.setActionCommand("pass");
 		doiMKButton.addActionListener(this);
+		JButton capNhatThongTinButton = new JButton("Cập nhật thông tin");
+		capNhatThongTinButton.setActionCommand("update");
+		capNhatThongTinButton.addActionListener(this);
 		JButton dangXuatButton = new JButton("Đăng xuất");
 		dangXuatButton.setActionCommand("sign out");
 		dangXuatButton.addActionListener(this);
 
-		if (tk.getLoai().equals("GV")) {
+		JList<String> accountInfoElementList;
 
-			GiaoVu gvu = TaiKhoanDAO.layGiaoVu(tk);
-			JList<String> accountInfoElementList = new JList<String>(
+		if (tk.getLoai().equals("GV")) {
+			gvu = TaiKhoanDAO.layGiaoVu(tk);
+			accountInfoElementList = new JList<String>(
 					new String[] { "Tài khoản: " + gvu.getTaiKhoan().getTenTaiKhoan(), "Mã giáo vụ: " + gvu.getMaGVu(),
 							"Tên giáo vụ: " + gvu.getTenGiaoVu(), "Giới tính: " + gvu.getGioiTinh(),
-							"Ngày sinh: " + gvu.getNgSinh() });
-			accountInfoElementList.setFont(new Font("Dialog", Font.BOLD, 14));
-			accountInfoElementList.setBackground(null);
-			accountInfoElementList.setFixedCellHeight(40);
-			
-			gbc = new GBCBuilder(1, 1).setFill(GridBagConstraints.BOTH);
-			this.add(accountInfoElementList, gbc.setGrid(1, 1).setSpan(2, 1).setWeight(1, 0).setInsets(0, 0, 10, 0));
-			this.add(doiMKButton, gbc.setGrid(1, 2).setSpan(1, 1));
-			this.add(dangXuatButton, gbc.setGrid(2, 2));
+							"Ngày sinh: " + new SimpleDateFormat("dd/MM/yyyy").format(gvu.getNgSinh()) });
+
+		} else {
+			sv = TaiKhoanDAO.laySinhVien(tk);
+			accountInfoElementList = new JList<String>(new String[] { "Tài khoản: " + sv.getTaiKhoan().getTenTaiKhoan(),
+					"Mã số sinh viên: " + sv.getMssv(), "Họ tên: " + sv.getHoTen(), "Giới tính: " + sv.getGioiTinh(),
+					"Ngày sinh: " + new SimpleDateFormat("dd/MM/yyyy").format(sv.getNgSinh()),
+					"Khoa: " + sv.getKhoa() });
+
 		}
 
-		if (tk.getLoai().equals("SV")) {
+		accountInfoElementList.setFont(new Font("Dialog", Font.PLAIN, 14));
+		accountInfoElementList.setBackground(null);
+		accountInfoElementList.setFixedCellHeight(40);
 
-			SinhVien sv = TaiKhoanDAO.laySinhVien(tk);
-			JLabel taiKhoanLabel = new JLabel("Tài khoản: " + sv.getTaiKhoan().getTenTaiKhoan());
-			JLabel maSVLabel = new JLabel("Mã số sinh viên: " + sv.getMssv());
-			JLabel hoTenLabel = new JLabel("Họ tên: " + sv.getHoTen());
-			JLabel gioiTinhLabel = new JLabel("Giới tính: " + sv.getGioiTinh());
-			JLabel ngaySinhLabel = new JLabel("Ngày sinh: " + sv.getNgSinh());
-			JLabel khoaLabel = new JLabel("Khoa: " + sv.getKhoa());
-
-			gbc = new GBCBuilder(1, 1).setAnchor(GridBagConstraints.LINE_START).setInsets(5);
-			this.add(taiKhoanLabel, gbc);
-			this.add(maSVLabel, gbc.setGrid(1, 2));
-			this.add(hoTenLabel, gbc.setGrid(1, 3));
-			this.add(gioiTinhLabel, gbc.setGrid(1, 4));
-			this.add(ngaySinhLabel, gbc.setGrid(1, 5));
-			this.add(khoaLabel, gbc.setGrid(1, 6));
-			this.add(doiMKButton, gbc.setGrid(1, 7));
-			this.add(dangXuatButton, gbc.setGrid(1, 8));
-		}
+		gbc = new GBCBuilder(1, 1).setFill(GridBagConstraints.BOTH);
+		this.add(accountInfoElementList, gbc.setGrid(1, 1).setSpan(2, 1).setWeight(1, 0).setInsets(0, 0, 10, 0));
+		this.add(doiMKButton, gbc.setGrid(1, 2).setSpan(1, 1));
+		this.add(dangXuatButton, gbc.setGrid(2, 2));
+		this.add(capNhatThongTinButton, gbc.setGrid(1, 3).setSpan(2, 1));
 	}
 
 	@Override
@@ -130,6 +128,52 @@ public class AccountInfoPanel extends JPanel implements ActionListener {
 				theMainScreen.dispose();
 				new LoginScreen();
 			}
+			break;
+		}
+
+		case "update": {
+			ModifyDialog modifyDialog;
+			if (tk.getLoai().equals("GV")) {
+				modifyDialog = new ModifyDialog(
+						new String[] { "Mã giáo vụ: ", "Tên giáo vụ: ", "Giới tính: ", "Ngày sinh: " },
+						new String[] { "" + gvu.getMaGVu(), gvu.getTenGiaoVu(), gvu.getGioiTinh(),
+								new SimpleDateFormat("dd/MM/yyyy").format(gvu.getNgSinh()) });
+			} else {
+				modifyDialog = new ModifyDialog(
+						new String[] { "Mã số sinh viên: ", "Họ tên: ", "Giới tính: ", "Ngày sinh: ", "Khoa: " },
+						new String[] { "" + sv.getMssv(), sv.getHoTen(), sv.getGioiTinh(),
+								new SimpleDateFormat("dd/MM/yyyy").format(sv.getNgSinh()), sv.getKhoa() });
+			}
+
+			String[] result = modifyDialog.showDialog();
+			if (result != null) {
+				try {
+					if (tk.getLoai().equals("GV")) {
+						gvu.setMaGVu(Integer.parseInt(result[0]));
+						gvu.setTenGiaoVu(result[1]);
+						gvu.setGioiTinh(result[2]);
+						gvu.setNgSinh(new SimpleDateFormat("dd/MM/yyyy").parse((result[3])));
+
+						GiaoVuDAO.capNhatThongTinGiaoVu(gvu);
+					} else {
+						sv.setMssv(Integer.parseInt(result[0]));
+						sv.setHoTen(result[1]);
+						sv.setGioiTinh(result[2]);
+						sv.setNgSinh(new SimpleDateFormat("dd/MM/yyyy").parse((result[3])));
+						sv.setKhoa(result[4]);
+
+						SinhVienDAO.capNhatThongTinSinhVien(sv);
+					}
+
+					
+					JOptionPane.showMessageDialog(modifyDialog, "Cập nhật thông tin thành công!", "Thông báo",
+							JOptionPane.INFORMATION_MESSAGE, null);
+				} catch (NumberFormatException | ParseException ex) {
+					JOptionPane.showMessageDialog(modifyDialog, "Sai định dạng", "Lỗi cập nhật thông tin",
+							JOptionPane.WARNING_MESSAGE, null);
+				}
+			}
+
 			break;
 		}
 		}

@@ -11,30 +11,29 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
-import daos.HocKiDAO;
-import daos.LopHocDAO;
+import daos.HocPhanDAO;
+import daos.KyDKHPDAO;
 
-public class GiaoVuLopHocPanel extends JPanel implements ActionListener {
+public class KyDKHPPanel extends JPanel implements ActionListener {
 	private static final long serialVersionUID = 1L;
 
 	JPanel listPanel, buttonPanel;
 	InfoPanel infoPanel;
 
-	public GiaoVuLopHocPanel() {
+	public KyDKHPPanel() {
 		this.setLayout(new GridBagLayout());
 		GBCBuilder gbc = new GBCBuilder(1, 1);
 
 		// ------------------------ INFO PANEL --------------------------------
-		infoPanel = new InfoPanel(new ArrayList<String>(
-				Arrays.asList("Mã lớp: ", "Tổng số sinh viên: ", "Tổng số nam: ", "Tổng số nữ: ")));
-		infoPanel.actionButton = new JButton("Xem danh sách sinh viên");
-		infoPanel.firstRowTable = LopHocDAO.getObjectMatrix()[0];
-		infoPanel.build();
+		infoPanel = new InfoPanel(
+				new String[] { "Năm học: ", "Học kì: ", "Lần: ", "Ngày bắt đầu: ", "Ngày kết thúc: " }, null, null);
+		infoPanel.updateInfo();
 
 		// ------------------------ LIST PANEL --------------------------------
-		listPanel = new ListPanel(infoPanel, LopHocDAO.getObjectMatrix(),
-				new String[] { "Mã lớp", "Tổng số sinh viên", "Tổng số nam", "Tổng số nữ" },
-				new String[] { "Thêm lớp học", "Xoá lớp học" }, this);
+
+		listPanel = new ListPanel(infoPanel, KyDKHPDAO.getObjectMatrix(),
+				new String[] { "Năm học", "Học kì", "Lần", "Ngày bắt đầu", "Ngày kết thúc" },
+				new String[] { "Tạo kỳ đăng ký học phần", "Xoá kỳ đăng ký học phần" }, this);
 
 		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, listPanel, infoPanel);
 		this.add(splitPane, gbc.setGrid(1, 1).setFill(GridBagConstraints.BOTH).setWeight(1, 1).setInsets(0));

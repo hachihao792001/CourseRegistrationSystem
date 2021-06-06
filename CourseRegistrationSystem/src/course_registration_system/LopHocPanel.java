@@ -11,31 +11,28 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
-import daos.GiaoVuDAO;
-import daos.HocPhanDAO;
+import daos.HocKiDAO;
+import daos.LopHocDAO;
 
-public class GiaoVuHocPhanPanel extends JPanel implements ActionListener {
+public class LopHocPanel extends JPanel implements ActionListener {
 	private static final long serialVersionUID = 1L;
 
 	JPanel listPanel, buttonPanel;
 	InfoPanel infoPanel;
 
-	public GiaoVuHocPhanPanel() {
+	public LopHocPanel() {
 		this.setLayout(new GridBagLayout());
 		GBCBuilder gbc = new GBCBuilder(1, 1);
 
 		// ------------------------ INFO PANEL --------------------------------
-		infoPanel = new InfoPanel(new ArrayList<String>(Arrays.asList("Mã môn: ", "Tên môn: ", "Số tín chỉ: ",
-				"Giáo viên lý thuyết: ", "Tên phòng học: ", "Thứ: ", "Ca: ", "Số slot tối đa: ")));
-		infoPanel.actionButton = new JButton("Xem danh sách sinh viên đăng ký");
-		infoPanel.firstRowTable = HocPhanDAO.getObjectMatrix()[0];
-		infoPanel.build();
+		infoPanel = new InfoPanel(new String[] { "Mã lớp: ", "Tổng số sinh viên: ", "Tổng số nam: ", "Tổng số nữ: " },
+				"Xem danh sách sinh viên", this);
+		infoPanel.updateInfo();
 
 		// ------------------------ LIST PANEL --------------------------------
-		listPanel = new ListPanel(
-				infoPanel, HocPhanDAO.getObjectMatrix(), new String[] { "Mã môn", "Tên môn", "Số tín chỉ",
-						"Giáo viên lý thuyết", "Tên phòng", "Thứ", "Ca", "Slot tối đa" },
-				new String[] { "Tìm học phần", "Thêm học phần", "Xoá học phần" }, this);
+		listPanel = new ListPanel(infoPanel, LopHocDAO.getObjectMatrix(),
+				new String[] { "Mã lớp", "Tổng số sinh viên", "Tổng số nam", "Tổng số nữ" },
+				new String[] { "Thêm lớp học", "Xoá lớp học" }, this);
 
 		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, listPanel, infoPanel);
 		this.add(splitPane, gbc.setGrid(1, 1).setFill(GridBagConstraints.BOTH).setWeight(1, 1).setInsets(0));
