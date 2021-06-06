@@ -21,13 +21,14 @@ public class HocKiPanel extends JPanel implements ActionListener {
 		GBCBuilder gbc = new GBCBuilder(1, 1);
 
 		// ------------------------ INFO PANEL --------------------------------
-		infoPanel = new InfoPanel(new String[] { "Tên học kì: ", "Năm học: ", "Ngày bắt đầu: ", "Ngày kết thúc: " }, "Để thành học kì hiện tại", this);
+		infoPanel = new InfoPanel(new String[] { "Tên học kì: ", "Năm học: ", "Ngày bắt đầu: ", "Ngày kết thúc: " },
+				new String[] { "Để thành học kì hiện tại" }, this);
 		infoPanel.updateInfo();
 
 		// ------------------------ LIST PANEL --------------------------------
 		listPanel = new ListPanel(infoPanel, HocKiDAO.getObjectMatrix(),
 				new String[] { "Tên học kì", "Năm học", "Ngày bắt đầu", "Ngày kết thúc" },
-				new String[] { "Thêm học kì", "Xoá học kì" }, this);
+				new String[] { "Thêm học kì", "Xoá học kì" }, this, "học kì");
 
 		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, listPanel, infoPanel);
 		this.add(splitPane, gbc.setGrid(1, 1).setFill(GridBagConstraints.BOTH).setWeight(1, 1).setInsets(0));

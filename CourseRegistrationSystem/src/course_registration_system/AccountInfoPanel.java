@@ -23,9 +23,13 @@ public class AccountInfoPanel extends JPanel implements ActionListener {
 	GiaoVu gvu;
 	SinhVien sv;
 
-	public AccountInfoPanel(TaiKhoan tk) {
+	JList<String> theJList;
+	TaiKhoanPanel taiKhoanPanel;
+
+	public AccountInfoPanel(TaiKhoan tk, TaiKhoanPanel taiKhoanPanel) {
 		this.setLayout(new GridBagLayout());
 		this.tk = tk;
+		this.taiKhoanPanel = taiKhoanPanel;
 		this.setBorder(BorderFactory.createTitledBorder("Thông tin tài khoản"));
 
 		GBCBuilder gbc;
@@ -39,30 +43,28 @@ public class AccountInfoPanel extends JPanel implements ActionListener {
 		dangXuatButton.setActionCommand("sign out");
 		dangXuatButton.addActionListener(this);
 
-		JList<String> accountInfoElementList;
-
 		if (tk.getLoai().equals("GV")) {
-			gvu = TaiKhoanDAO.layGiaoVu(tk);
-			accountInfoElementList = new JList<String>(
+			gvu = TaiKhoanDAO.layGiaoVu(tk.getTenTaiKhoan());
+			theJList = new JList<String>(
 					new String[] { "Tài khoản: " + gvu.getTaiKhoan().getTenTaiKhoan(), "Mã giáo vụ: " + gvu.getMaGVu(),
 							"Tên giáo vụ: " + gvu.getTenGiaoVu(), "Giới tính: " + gvu.getGioiTinh(),
 							"Ngày sinh: " + new SimpleDateFormat("dd/MM/yyyy").format(gvu.getNgSinh()) });
 
 		} else {
 			sv = TaiKhoanDAO.laySinhVien(tk);
-			accountInfoElementList = new JList<String>(new String[] { "Tài khoản: " + sv.getTaiKhoan().getTenTaiKhoan(),
+			theJList = new JList<String>(new String[] { "Tài khoản: " + sv.getTaiKhoan().getTenTaiKhoan(),
 					"Mã số sinh viên: " + sv.getMssv(), "Họ tên: " + sv.getHoTen(), "Giới tính: " + sv.getGioiTinh(),
 					"Ngày sinh: " + new SimpleDateFormat("dd/MM/yyyy").format(sv.getNgSinh()),
 					"Khoa: " + sv.getKhoa() });
 
 		}
 
-		accountInfoElementList.setFont(new Font("Dialog", Font.PLAIN, 14));
-		accountInfoElementList.setBackground(null);
-		accountInfoElementList.setFixedCellHeight(40);
+		theJList.setFont(new Font("Dialog", Font.PLAIN, 14));
+		theJList.setBackground(null);
+		theJList.setFixedCellHeight(40);
 
 		gbc = new GBCBuilder(1, 1).setFill(GridBagConstraints.BOTH);
-		this.add(accountInfoElementList, gbc.setGrid(1, 1).setSpan(2, 1).setWeight(1, 0).setInsets(0, 0, 10, 0));
+		this.add(theJList, gbc.setGrid(1, 1).setSpan(2, 1).setWeight(1, 0).setInsets(0, 0, 10, 0));
 		this.add(doiMKButton, gbc.setGrid(1, 2).setSpan(1, 1));
 		this.add(dangXuatButton, gbc.setGrid(2, 2));
 		this.add(capNhatThongTinButton, gbc.setGrid(1, 3).setSpan(2, 1));
@@ -132,20 +134,22 @@ public class AccountInfoPanel extends JPanel implements ActionListener {
 		}
 
 		case "update": {
-			ModifyDialog modifyDialog;
+			MultiTextFieldDialog updateInfoDialog;
 			if (tk.getLoai().equals("GV")) {
-				modifyDialog = new ModifyDialog(
+				updateInfoDialog = new MultiTextFieldDialog(
 						new String[] { "Mã giáo vụ: ", "Tên giáo vụ: ", "Giới tính: ", "Ngày sinh: " },
 						new String[] { "" + gvu.getMaGVu(), gvu.getTenGiaoVu(), gvu.getGioiTinh(),
-								new SimpleDateFormat("dd/MM/yyyy").format(gvu.getNgSinh()) });
+								new SimpleDateFormat("dd/MM/yyyy").format(gvu.getNgSinh()) },
+						"Cập nhật thông tin");
 			} else {
-				modifyDialog = new ModifyDialog(
+				updateInfoDialog = new MultiTextFieldDialog(
 						new String[] { "Mã số sinh viên: ", "Họ tên: ", "Giới tính: ", "Ngày sinh: ", "Khoa: " },
 						new String[] { "" + sv.getMssv(), sv.getHoTen(), sv.getGioiTinh(),
-								new SimpleDateFormat("dd/MM/yyyy").format(sv.getNgSinh()), sv.getKhoa() });
+								new SimpleDateFormat("dd/MM/yyyy").format(sv.getNgSinh()), sv.getKhoa() },
+						"Cập nhật thông tin");
 			}
 
-			String[] result = modifyDialog.showDialog();
+			String[] result = updateInfoDialog.showDialog();
 			if (result != null) {
 				try {
 					if (tk.getLoai().equals("GV")) {
@@ -155,6 +159,12 @@ public class AccountInfoPanel extends JPanel implements ActionListener {
 						gvu.setNgSinh(new SimpleDateFormat("dd/MM/yyyy").parse((result[3])));
 
 						GiaoVuDAO.capNhatThongTinGiaoVu(gvu);
+						theJList.setListData(new String[] { "Tài khoản: " + gvu.getTaiKhoan().getTenTaiKhoan(),
+								"Mã giáo vụ: " + gvu.getMaGVu(), "Tên giáo vụ: " + gvu.getTenGiaoVu(),
+								"Giới tính: " + gvu.getGioiTinh(),
+								"Ngày sinh: " + new SimpleDateFormat("dd/MM/yyyy").format(gvu.getNgSinh()) });
+						taiKhoanPanel.listPanel.updateTable(GiaoVuDAO.getObjectMatrix());
+
 					} else {
 						sv.setMssv(Integer.parseInt(result[0]));
 						sv.setHoTen(result[1]);
@@ -163,13 +173,18 @@ public class AccountInfoPanel extends JPanel implements ActionListener {
 						sv.setKhoa(result[4]);
 
 						SinhVienDAO.capNhatThongTinSinhVien(sv);
+						theJList.setListData(new String[] { "Tài khoản: " + sv.getTaiKhoan().getTenTaiKhoan(),
+								"Mã số sinh viên: " + sv.getMssv(), "Họ tên: " + sv.getHoTen(),
+								"Giới tính: " + sv.getGioiTinh(),
+								"Ngày sinh: " + new SimpleDateFormat("dd/MM/yyyy").format(sv.getNgSinh()),
+								"Khoa: " + sv.getKhoa() });
 					}
 
-					
-					JOptionPane.showMessageDialog(modifyDialog, "Cập nhật thông tin thành công!", "Thông báo",
+					JOptionPane.showMessageDialog(updateInfoDialog, "Cập nhật thông tin thành công!", "Thông báo",
 							JOptionPane.INFORMATION_MESSAGE, null);
+
 				} catch (NumberFormatException | ParseException ex) {
-					JOptionPane.showMessageDialog(modifyDialog, "Sai định dạng", "Lỗi cập nhật thông tin",
+					JOptionPane.showMessageDialog(updateInfoDialog, "Sai định dạng", "Lỗi cập nhật thông tin",
 							JOptionPane.WARNING_MESSAGE, null);
 				}
 			}

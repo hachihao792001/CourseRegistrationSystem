@@ -16,23 +16,31 @@ import javax.swing.table.DefaultTableModel;
 public class ListPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 
+	JTable theTable;
+	String[] columnNames;
+
 	public ListPanel(InfoPanel infoPanel, Object[][] objectMatrix, String[] columnNames, String[] actionButtonTexts,
-			ActionListener actionListener) {
+			ActionListener actionListener, String tableTitle) {
 		this.setLayout(new GridBagLayout());
 		GBCBuilder gbc = new GBCBuilder(1, 1);
+		this.columnNames = columnNames;
 
 		JScrollPane theScrollPane = new JScrollPane();
-		JTable theTable = new JTable();
+		theTable = new JTable();
 		theTable.setModel(new DefaultTableModel(objectMatrix, columnNames));
 		theTable.setRowHeight(30);
 		theTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent event) {
-				for (int i = 0; i < infoPanel.elementDatas.length; i++) 
-					infoPanel.elementDatas[i] = theTable.getValueAt(theTable.getSelectedRow(), i).toString();
+				for (int i = 0; i < infoPanel.elementDatas.length; i++) {
+					int selectedRow = theTable.getSelectedRow();
+					if (selectedRow == -1)
+						selectedRow = 0;
+					infoPanel.elementDatas[i] = theTable.getValueAt(selectedRow, i).toString();
+				}
 				infoPanel.updateInfo();
 			}
 		});
-		theTable.setRowSelectionInterval(0, 0);
+		setTableSelectedRow(0);
 		theScrollPane.setViewportView(theTable);
 		this.add(theScrollPane,
 				gbc.setSpan(actionButtonTexts.length, 1).setFill(GridBagConstraints.BOTH).setWeight(1, 1));
@@ -45,6 +53,15 @@ public class ListPanel extends JPanel {
 
 		}
 
-		this.setBorder(BorderFactory.createTitledBorder("Danh sách môn học"));
+		this.setBorder(BorderFactory.createTitledBorder("Danh sách " + tableTitle));
+	}
+
+	public void updateTable(Object[][] objectMatrix) {
+		theTable.setModel(new DefaultTableModel(objectMatrix, columnNames));
+		theTable.setRowSelectionInterval(0, 0);
+	}
+
+	public void setTableSelectedRow(int row) {
+		theTable.setRowSelectionInterval(row, row);
 	}
 }

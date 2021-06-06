@@ -19,7 +19,7 @@ public class GiaoVuDAO {
 		try {
 			gv = (GiaoVu) session.get(GiaoVu.class, maGVu);
 			Hibernate.initialize(gv.getTaiKhoan());
-		} catch (HibernateException ex) {
+		} catch (HibernateException | NullPointerException ex) {
 			// Log the exception
 			System.err.println(ex);
 		} finally {

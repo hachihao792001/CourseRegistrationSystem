@@ -26,13 +26,13 @@ public class LopHocPanel extends JPanel implements ActionListener {
 
 		// ------------------------ INFO PANEL --------------------------------
 		infoPanel = new InfoPanel(new String[] { "Mã lớp: ", "Tổng số sinh viên: ", "Tổng số nam: ", "Tổng số nữ: " },
-				"Xem danh sách sinh viên", this);
+				new String[] { "Xem danh sách sinh viên" }, this);
 		infoPanel.updateInfo();
 
 		// ------------------------ LIST PANEL --------------------------------
 		listPanel = new ListPanel(infoPanel, LopHocDAO.getObjectMatrix(),
 				new String[] { "Mã lớp", "Tổng số sinh viên", "Tổng số nam", "Tổng số nữ" },
-				new String[] { "Thêm lớp học", "Xoá lớp học" }, this);
+				new String[] { "Thêm lớp học", "Xoá lớp học" }, this, "lớp học");
 
 		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, listPanel, infoPanel);
 		this.add(splitPane, gbc.setGrid(1, 1).setFill(GridBagConstraints.BOTH).setWeight(1, 1).setInsets(0));

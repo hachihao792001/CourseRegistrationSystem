@@ -33,7 +33,7 @@ public class KyDKHPPanel extends JPanel implements ActionListener {
 
 		listPanel = new ListPanel(infoPanel, KyDKHPDAO.getObjectMatrix(),
 				new String[] { "Năm học", "Học kì", "Lần", "Ngày bắt đầu", "Ngày kết thúc" },
-				new String[] { "Tạo kỳ đăng ký học phần", "Xoá kỳ đăng ký học phần" }, this);
+				new String[] { "Tạo kỳ đăng ký học phần", "Xoá kỳ đăng ký học phần" }, this, " kỳ đăng ký học phần");
 
 		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, listPanel, infoPanel);
 		this.add(splitPane, gbc.setGrid(1, 1).setFill(GridBagConstraints.BOTH).setWeight(1, 1).setInsets(0));

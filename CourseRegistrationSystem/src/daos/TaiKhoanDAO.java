@@ -111,12 +111,12 @@ public class TaiKhoanDAO {
 		return true;
 	}
 
-	public static GiaoVu layGiaoVu(TaiKhoan taiKhoan) {
+	public static GiaoVu layGiaoVu(String tenTaiKhoan) {
 		GiaoVu gv = null;
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		try {
 			String hql = "select gv " + "from GiaoVu gv, TaiKhoan tk " + "where tk.tenTaiKhoan = '"
-					+ taiKhoan.getTenTaiKhoan() + "' and" + " gv.taiKhoan.tenTaiKhoan = tk.tenTaiKhoan";
+					+ tenTaiKhoan + "' and" + " gv.taiKhoan.tenTaiKhoan = tk.tenTaiKhoan";
 			@SuppressWarnings("unchecked")
 			Query<GiaoVu> query = session.createQuery(hql);
 			gv = query.getResultList().get(0);

@@ -13,14 +13,13 @@ import javax.swing.JPanel;
 
 public class InfoPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
-	public JButton actionButton;
 	public int padding = 20, buttonPadding = 10;
 
 	JList<String> theJList;
 	public String[] elementNames;
 	public String[] elementDatas;
 
-	public InfoPanel(String[] elementNames, String buttonText, ActionListener buttonListener) {
+	public InfoPanel(String[] elementNames, String[] buttonTexts, ActionListener buttonListener) {
 		this.setLayout(new GridBagLayout());
 		this.elementNames = elementNames;
 		this.elementDatas = new String[elementNames.length];
@@ -37,10 +36,13 @@ public class InfoPanel extends JPanel {
 
 		this.add(theJList, gbc.setGrid(1, 1));
 
-		if (buttonText != null) {
-			actionButton = new JButton(buttonText);
-			actionButton.addActionListener(buttonListener);
-			this.add(actionButton, gbc.setGrid(1, 2).setInsets(buttonPadding, 0, 0, 0));
+		if (buttonTexts != null) {
+			for (int i = 0; i < buttonTexts.length; i++) {
+				JButton newButton = new JButton(buttonTexts[i]);
+				newButton.addActionListener(buttonListener);
+				newButton.setActionCommand(buttonTexts[i]);
+				this.add(newButton, gbc.setGrid(1, i + 2).setInsets(buttonPadding, 0, 0, 0).setSpan(1, 1));
+			}
 		}
 
 		this.setBorder(BorderFactory.createTitledBorder("Thông tin"));

@@ -25,15 +25,17 @@ public class HocPhanPanel extends JPanel implements ActionListener {
 		GBCBuilder gbc = new GBCBuilder(1, 1);
 
 		// ------------------------ INFO PANEL --------------------------------
-		infoPanel = new InfoPanel(new String[] { "Mã môn: ", "Tên môn: ", "Số tín chỉ: ", "Giáo viên lý thuyết: ",
-				"Tên phòng học: ", "Thứ: ", "Ca: ", "Số slot tối đa: " }, "Xem danh sách sinh viên đăng ký", this);
+		infoPanel = new InfoPanel(
+				new String[] { "Mã môn: ", "Tên môn: ", "Số tín chỉ: ", "Giáo viên lý thuyết: ", "Tên phòng học: ",
+						"Thứ: ", "Ca: ", "Số slot tối đa: " },
+				new String[] { "Xem danh sách sinh viên đăng ký" }, this);
 		infoPanel.updateInfo();
 
 		// ------------------------ LIST PANEL --------------------------------
-		listPanel = new ListPanel(
-				infoPanel, HocPhanDAO.getObjectMatrix(), new String[] { "Mã môn", "Tên môn", "Số tín chỉ",
-						"Giáo viên lý thuyết", "Tên phòng", "Thứ", "Ca", "Slot tối đa" },
-				new String[] { "Tìm học phần", "Thêm học phần", "Xoá học phần" }, this);
+		listPanel = new ListPanel(infoPanel, HocPhanDAO.getObjectMatrix(),
+				new String[] { "Mã môn", "Tên môn", "Số tín chỉ", "Giáo viên lý thuyết", "Tên phòng", "Thứ", "Ca",
+						"Slot tối đa" },
+				new String[] { "Tìm học phần", "Thêm học phần", "Xoá học phần" }, this, "học phần");
 
 		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, listPanel, infoPanel);
 		this.add(splitPane, gbc.setGrid(1, 1).setFill(GridBagConstraints.BOTH).setWeight(1, 1).setInsets(0));

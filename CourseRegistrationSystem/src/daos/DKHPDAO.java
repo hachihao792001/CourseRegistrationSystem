@@ -20,7 +20,6 @@ public class DKHPDAO {
 			Hibernate.initialize(h.getDkhpID().getSinhVien());
 			Hibernate.initialize(h.getDkhpID().getHocPhan());
 			Hibernate.initialize(h.getDkhpID().getHocPhan().getMonHoc());
-			Hibernate.initialize(h.getGvlt());
 		} catch (HibernateException ex) {
 			// Log the exception
 			System.err.println(ex);
@@ -42,7 +41,6 @@ public class DKHPDAO {
 				Hibernate.initialize(h.getDkhpID().getSinhVien());
 				Hibernate.initialize(h.getDkhpID().getHocPhan());
 				Hibernate.initialize(h.getDkhpID().getHocPhan().getMonHoc());
-				Hibernate.initialize(h.getGvlt());
 			}
 
 		} catch (HibernateException ex) {

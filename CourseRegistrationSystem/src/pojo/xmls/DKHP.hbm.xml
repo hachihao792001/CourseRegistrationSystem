@@ -16,10 +16,6 @@ Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd
 
 		</composite-id>
 
-		<many-to-one class="pojo.GiaoVien" name="gvlt" fetch="select">
-			<column name="Gvlt" not-null="true" />
-		</many-to-one>
-
 		<property name="thoiGianHoc" type="date">
 			<column length="10" name="ThoiGianHoc" />
 		</property>
