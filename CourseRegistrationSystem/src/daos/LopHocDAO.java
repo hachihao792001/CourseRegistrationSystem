@@ -2,6 +2,7 @@ package daos;
 
 import java.util.List;
 
+import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -24,6 +25,48 @@ public class LopHocDAO {
 		return sv;
 	}
 
+	public static List<SinhVien> layDanhSachSinhVien(String maLop) {
+		List<SinhVien> ds = null;
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		try {
+			String hql = "select sv from SinhVien as sv, Hoc as hoc where sv.mssv = hoc.hocID.sinhVien.mssv and hoc.hocID.lopHoc.maLop = '"
+					+ maLop + "'";
+			@SuppressWarnings("unchecked")
+			Query<SinhVien> query = session.createQuery(hql);
+			ds = query.list();
+			for (SinhVien sinhVien : ds)
+				Hibernate.initialize(sinhVien.getTaiKhoan());
+
+		} catch (HibernateException ex) {
+			// Log the exception
+			System.err.println(ex);
+		} finally {
+			session.close();
+		}
+		return ds;
+	}
+
+	public static List<SinhVien> layDanhSachSinhVienKhongTrongLop(String maLop) {
+		List<SinhVien> ds = null;
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		try {
+			String hql = "select sv from SinhVien as sv, Hoc as hoc "
+					+ "where sv.mssv = hoc.hocID.sinhVien.mssv and hoc.hocID.lopHoc.maLop != '" + maLop + "'";
+			@SuppressWarnings("unchecked")
+			Query<SinhVien> query = session.createQuery(hql);
+			ds = query.list();
+			for (SinhVien sinhVien : ds)
+				Hibernate.initialize(sinhVien.getTaiKhoan());
+
+		} catch (HibernateException ex) {
+			// Log the exception
+			System.err.println(ex);
+		} finally {
+			session.close();
+		}
+		return ds;
+	}
+
 	public static List<LopHoc> layDanhSachLopHoc() {
 		List<LopHoc> ds = null;
 		Session session = HibernateUtil.getSessionFactory().openSession();
@@ -41,7 +84,7 @@ public class LopHocDAO {
 		}
 		return ds;
 	}
-	
+
 	public static boolean themLopHoc(LopHoc lh) {
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		if (LopHocDAO.layThongTinLopHoc(lh.getMaLop()) != null) {
@@ -110,7 +153,7 @@ public class LopHocDAO {
 		}
 		return true;
 	}
-	
+
 	public static Object[][] getObjectMatrix() {
 		List<LopHoc> ds = layDanhSachLopHoc();
 		Object[][] data = new Object[ds.size()][4];

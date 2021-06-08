@@ -27,19 +27,21 @@ public class ListPanel extends JPanel {
 
 		JScrollPane theScrollPane = new JScrollPane();
 		theTable = new JTable();
-		theTable.setModel(new DefaultTableModel(objectMatrix, columnNames));
+		updateTable(objectMatrix);
 		theTable.setRowHeight(30);
-		theTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-			public void valueChanged(ListSelectionEvent event) {
-				for (int i = 0; i < infoPanel.elementDatas.length; i++) {
+		if (infoPanel != null) {
+			theTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+				public void valueChanged(ListSelectionEvent event) {
 					int selectedRow = theTable.getSelectedRow();
 					if (selectedRow == -1)
 						selectedRow = 0;
-					infoPanel.elementDatas[i] = theTable.getValueAt(selectedRow, i).toString();
+					for (int i = 0; i < infoPanel.elementDatas.length; i++)
+						infoPanel.elementDatas[i] = theTable.getValueAt(selectedRow, i).toString();
+
+					infoPanel.updateInfo();
 				}
-				infoPanel.updateInfo();
-			}
-		});
+			});
+		}
 		setTableSelectedRow(0);
 		theScrollPane.setViewportView(theTable);
 		this.add(theScrollPane,
@@ -57,8 +59,15 @@ public class ListPanel extends JPanel {
 	}
 
 	public void updateTable(Object[][] objectMatrix) {
-		theTable.setModel(new DefaultTableModel(objectMatrix, columnNames));
-		theTable.setRowSelectionInterval(0, 0);
+		theTable.setModel(new DefaultTableModel(objectMatrix, columnNames) {
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				return false;
+			}
+		});
 	}
 
 	public void setTableSelectedRow(int row) {

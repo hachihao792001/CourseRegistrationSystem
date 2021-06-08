@@ -52,6 +52,29 @@ public class DKHPDAO {
 		return ds;
 	}
 
+	public static List<DKHP> layDanhSachDKHP(HocPhan hp) {
+		List<DKHP> ds = null;
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		try {
+			String hql = "select dkhp from DKHP dkhp where dkhp.dkhpID.hocPhan.maHP = " + hp.getMaHP();
+			@SuppressWarnings("unchecked")
+			Query<DKHP> query = session.createQuery(hql);
+			ds = query.list();
+			for (DKHP h : ds) {
+				Hibernate.initialize(h.getDkhpID().getSinhVien());
+				Hibernate.initialize(h.getDkhpID().getHocPhan());
+				Hibernate.initialize(h.getDkhpID().getHocPhan().getMonHoc());
+			}
+
+		} catch (HibernateException ex) {
+			// Log the exception
+			System.err.println(ex);
+		} finally {
+			session.close();
+		}
+		return ds;
+	}
+
 	public static boolean themDKHP(DKHP dkhp) {
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		if (DKHPDAO.layThongTinDKHP(dkhp.getDkhpID()) != null) {
@@ -119,5 +142,19 @@ public class DKHPDAO {
 			session.close();
 		}
 		return true;
+	}
+
+	public static Object[][] getObjectMatrix(List<DKHP> ds) {
+		Object[][] data = new Object[ds.size()][6];
+		for (int i = 0; i < data.length; i++) {
+			data[i][0] = ds.get(i).getDkhpID().getSinhVien().getMssv();
+			data[i][1] = ds.get(i).getDkhpID().getSinhVien().getHoTen();
+			data[i][2] = ds.get(i).getDkhpID().getHocPhan().getMonHoc().getMaMH();
+			data[i][3] = ds.get(i).getDkhpID().getHocPhan().getMonHoc().getTenMH();
+			data[i][4] = ds.get(i).getThoiGianHoc();
+			data[i][5] = ds.get(i).getThoiGianDKHP();
+		}
+
+		return data;
 	}
 }

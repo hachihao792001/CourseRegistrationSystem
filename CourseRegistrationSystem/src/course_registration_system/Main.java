@@ -4,11 +4,6 @@ import java.io.IOException;
 
 import javax.swing.UIManager;
 
-import daos.DKHPDAO;
-import daos.GiaoVienDAO;
-import daos.HocDAO;
-import daos.HocPhanDAO;
-import daos.KyDKHPDAO;
 import daos.TaiKhoanDAO;
 
 public class Main {

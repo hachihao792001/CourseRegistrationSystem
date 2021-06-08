@@ -18,7 +18,8 @@ public class KyDKHPDAO {
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		try {
 			kyDKHP = (KyDKHP) session.get(KyDKHP.class, maKyDKHP);
-			Hibernate.initialize(kyDKHP.getKyDKHPID().getHocKi());
+			if (kyDKHP != null)
+				Hibernate.initialize(kyDKHP.getKyDKHPID().getHocKi());
 		} catch (HibernateException ex) {
 			// Log the exception
 			System.err.println(ex);
@@ -33,6 +34,27 @@ public class KyDKHPDAO {
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		try {
 			String hql = "select hk from KyDKHP hk";
+			@SuppressWarnings("unchecked")
+			Query<KyDKHP> query = session.createQuery(hql);
+			ds = query.list();
+			for (KyDKHP kyDKHP : ds)
+				Hibernate.initialize(kyDKHP.getKyDKHPID().getHocKi());
+
+		} catch (HibernateException ex) {
+			// Log the exception
+			System.err.println(ex);
+		} finally {
+			session.close();
+		}
+		return ds;
+	}
+
+	public static List<KyDKHP> layDanhSachKyDKHP(HocKi hk) {
+		List<KyDKHP> ds = null;
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		try {
+			String hql = "select ky from KyDKHP ky, HocKi hk where ky.kyDKHPID.hocKi.maHK = hk.maHK and hk.maHK = "
+					+ hk.getMaHK();
 			@SuppressWarnings("unchecked")
 			Query<KyDKHP> query = session.createQuery(hql);
 			ds = query.list();

@@ -1,15 +1,11 @@
 package course_registration_system;
 
 import java.awt.CardLayout;
-import java.awt.Color;
-import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.List;
 
 import javax.swing.*;
 
-import daos.TaiKhoanDAO;
 import pojo.TaiKhoan;
 
 public class MainScreen extends JFrame implements ActionListener {
@@ -34,7 +30,7 @@ public class MainScreen extends JFrame implements ActionListener {
 		JSplitPane mainSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, accountInfoPanel, giaoVuTabbedPane);
 		mainContent.add(mainSplitPane, "giaoVuCard");
 
-		this.setTitle("Phần mềm quản lí học sinh");
+		this.setTitle("Phần mềm quản lí học phần");
 		this.setContentPane(mainContent);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.pack();

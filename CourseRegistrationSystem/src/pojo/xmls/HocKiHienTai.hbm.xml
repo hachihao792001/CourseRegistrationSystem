@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate
+Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class catalog="qlhocphan" name="pojo.HocKiHienTai" table="HocKiHienTai">
+
+		<id name="id" column="Id" type="integer">
+			<generator class="identity" />
+		</id>
+
+		<many-to-one class="pojo.HocKi" name="hk" fetch="select">
+			<column name="MaHK" not-null="true" />
+		</many-to-one>
+
+	</class>
+</hibernate-mapping>

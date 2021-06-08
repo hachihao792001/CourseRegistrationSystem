@@ -12,6 +12,7 @@
 		<mapping resource="pojo/xmls/SinhVien.hbm.xml" />
 		<mapping resource="pojo/xmls/GiaoVu.hbm.xml" />
 		<mapping resource="pojo/xmls/HocKi.hbm.xml" />
+		<mapping resource="pojo/xmls/HocKiHienTai.hbm.xml" />
 		<mapping resource="pojo/xmls/KyDKHP.hbm.xml" />
 		<mapping resource="pojo/xmls/LopHoc.hbm.xml" />
 		<mapping resource="pojo/xmls/Hoc.hbm.xml" />

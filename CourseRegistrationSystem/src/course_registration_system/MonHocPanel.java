@@ -3,20 +3,12 @@ package course_registration_system;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 
-import org.hibernate.exception.GenericJDBCException;
 
-import daos.GiaoVuDAO;
 import daos.MonHocDAO;
-import daos.TaiKhoanDAO;
-import pojo.GiaoVu;
 import pojo.MonHoc;
-import pojo.TaiKhoan;
 
 public class MonHocPanel extends JPanel implements ActionListener {
 	private static final long serialVersionUID = 1L;
@@ -89,8 +81,7 @@ public class MonHocPanel extends JPanel implements ActionListener {
 
 					MonHocDAO.themMonHoc(newMonHoc);
 
-					listPanel.theTable.setModel(new DefaultTableModel(GiaoVuDAO.getObjectMatrix(),
-							new String[] { "Mã môn học", "Tên môn học", "Số tín chỉ" }));
+					listPanel.updateTable(MonHocDAO.getObjectMatrix());
 					listPanel.setTableSelectedRow(listPanel.theTable.getRowCount() - 1);
 
 					JOptionPane.showMessageDialog(this, "Thêm môn học thành công!", "Thông báo",
@@ -103,7 +94,7 @@ public class MonHocPanel extends JPanel implements ActionListener {
 			break;
 		}
 		case "Cập nhật thông tin môn học": {
-			String monHocCanCapNhat = listPanel.theTable.getValueAt(listPanel.theTable.getSelectedRow(), 0).toString();
+			String monHocCanCapNhat = infoPanel.elementDatas[0];
 			MonHoc selectedMonHoc = MonHocDAO.layThongTinMonHoc(monHocCanCapNhat);
 
 			MultiTextFieldDialog capNhatThongTinDialog;
@@ -141,8 +132,7 @@ public class MonHocPanel extends JPanel implements ActionListener {
 
 				MonHocDAO.xoaMonHoc(monHocCanXoa);
 
-				listPanel.theTable.setModel(new DefaultTableModel(MonHocDAO.getObjectMatrix(),
-						new String[] { "Mã môn học", "Tên môn học", "Số tín chỉ" }));
+				listPanel.updateTable(MonHocDAO.getObjectMatrix());
 
 				JOptionPane.showMessageDialog(this, "Xoá môn học thành công!", "Thông báo",
 						JOptionPane.INFORMATION_MESSAGE, null);

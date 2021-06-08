@@ -1,5 +1,6 @@
 package daos;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import org.hibernate.Hibernate;
@@ -16,7 +17,8 @@ public class SinhVienDAO {
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		try {
 			sv = (SinhVien) session.get(SinhVien.class, mssv);
-			Hibernate.initialize(sv.getTaiKhoan());
+			if (sv != null)
+				Hibernate.initialize(sv.getTaiKhoan());
 		} catch (HibernateException ex) {
 			// Log the exception
 			System.err.println(ex);
@@ -113,5 +115,38 @@ public class SinhVienDAO {
 			session.close();
 		}
 		return true;
+	}
+
+	public static List<MonHoc> layDanhSachMonHocCoDK(int mssv) {
+		List<MonHoc> ds = null;
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		try {
+			String hql = "select mh from MonHoc as mh, DKHP as dkhp "
+					+ "where mh.maMH = dkhp.dkhpID.hocPhan.monHoc.maMH" + " and dkhp.dkhpID.sinhVien.mssv = '" + mssv
+					+ "'";
+			@SuppressWarnings("unchecked")
+			Query<MonHoc> query = session.createQuery(hql);
+			ds = query.list();
+
+		} catch (HibernateException ex) {
+			// Log the exception
+			System.err.println(ex);
+		} finally {
+			session.close();
+		}
+		return ds;
+	}
+
+	public static Object[][] getObjectMatrix(List<SinhVien> ds) {
+		Object[][] data = new Object[ds.size()][5];
+		for (int i = 0; i < data.length; i++) {
+			data[i][0] = ds.get(i).getMssv();
+			data[i][1] = ds.get(i).getHoTen();
+			data[i][2] = ds.get(i).getGioiTinh();
+			data[i][3] = new SimpleDateFormat("dd/MM/yyyy").format(ds.get(i).getNgSinh());
+			data[i][4] = ds.get(i).getKhoa();
+		}
+
+		return data;
 	}
 }

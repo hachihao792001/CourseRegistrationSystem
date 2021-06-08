@@ -7,12 +7,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 
 import org.hibernate.exception.GenericJDBCException;
 
 import daos.GiaoVuDAO;
-import daos.SinhVienDAO;
 import daos.TaiKhoanDAO;
 import pojo.GiaoVu;
 import pojo.TaiKhoan;
@@ -96,8 +94,7 @@ public class TaiKhoanPanel extends JPanel implements ActionListener {
 					TaiKhoanDAO.themTaiKhoan(taiKhoanMoi);
 					GiaoVuDAO.themGiaoVu(newGiaoVu);
 
-					listPanel.theTable.setModel(new DefaultTableModel(GiaoVuDAO.getObjectMatrix(),
-							new String[] { "Tài khoản", "Tên giáo vụ", "Giới tính", "Ngày sinh" }));
+					listPanel.updateTable(GiaoVuDAO.getObjectMatrix());
 					listPanel.setTableSelectedRow(listPanel.theTable.getRowCount() - 1);
 
 					JOptionPane.showMessageDialog(this, "Thêm giáo vụ thành công!", "Thông báo",
@@ -173,8 +170,7 @@ public class TaiKhoanPanel extends JPanel implements ActionListener {
 				GiaoVuDAO.xoaGiaoVu(TaiKhoanDAO.layGiaoVu(taiKhoanCanXoa).getMaGVu());
 				TaiKhoanDAO.xoaTaiKhoan(taiKhoanCanXoa);
 
-				listPanel.theTable.setModel(new DefaultTableModel(GiaoVuDAO.getObjectMatrix(),
-						new String[] { "Tài khoản", "Tên giáo vụ", "Giới tính", "Ngày sinh" }));
+				listPanel.updateTable(GiaoVuDAO.getObjectMatrix());
 
 				JOptionPane.showMessageDialog(this, "Xoá tài khoản thành công!", "Thông báo",
 						JOptionPane.INFORMATION_MESSAGE, null);

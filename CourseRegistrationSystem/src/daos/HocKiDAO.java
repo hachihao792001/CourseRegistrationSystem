@@ -3,6 +3,7 @@ package daos;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
+import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -25,6 +26,24 @@ public class HocKiDAO {
 		return hk;
 	}
 
+	public static HocKi layThongTinHocKi(String tenHK, int namHoc) {
+		HocKi hk = null;
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		try {
+			String hql = String.format("select hk from HocKi hk where hk.tenHocKi = '%s' and hk.namHoc = %d", tenHK,
+					namHoc);
+			@SuppressWarnings("unchecked")
+			Query<HocKi> query = session.createQuery(hql);
+			hk = query.list().get(0);
+		} catch (HibernateException ex) {
+			// Log the exception
+			System.err.println(ex);
+		} finally {
+			session.close();
+		}
+		return hk;
+	}
+
 	public static List<HocKi> layDanhSachHocKi() {
 		List<HocKi> ds = null;
 		Session session = HibernateUtil.getSessionFactory().openSession();
@@ -33,6 +52,31 @@ public class HocKiDAO {
 			@SuppressWarnings("unchecked")
 			Query<HocKi> query = session.createQuery(hql);
 			ds = query.list();
+
+		} catch (HibernateException ex) {
+			// Log the exception
+			System.err.println(ex);
+		} finally {
+			session.close();
+		}
+		return ds;
+	}
+
+	public static List<HocPhan> layDanhSachHocPhanTrongHocKi(HocKi hk) {
+		List<HocPhan> ds = null;
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		try {
+			String hql = "select hp from HocPhan hp, HocKi hk where"
+					+ " hp.kyDKHP.kyDKHPID.hocKi.maHK = hk.maHK and hk.maHK = " + hk.getMaHK();
+			@SuppressWarnings("unchecked")
+			Query<HocPhan> query = session.createQuery(hql);
+			ds = query.list();
+
+			for (HocPhan hp : ds) {
+				Hibernate.initialize(hp.getMonHoc());
+				Hibernate.initialize(hp.getGvlt());
+				Hibernate.initialize(hp.getKyDKHP());
+			}
 
 		} catch (HibernateException ex) {
 			// Log the exception
@@ -109,6 +153,13 @@ public class HocKiDAO {
 		} finally {
 			session.close();
 		}
+		return true;
+	}
+
+	public static boolean capNhatHocKiHienTai(String tenHocKi, int namHoc) {
+		HocKiHienTai hkht = HocKiHienTaiDAO.layThongTinHocKiHienTai();
+		hkht.setHk(layThongTinHocKi(tenHocKi, namHoc));
+		HocKiHienTaiDAO.capNhatThongTinHocKiHienTai(hkht);
 		return true;
 	}
 

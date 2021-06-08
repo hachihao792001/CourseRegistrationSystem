@@ -1,7 +1,6 @@
 package daos;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 import org.hibernate.Hibernate;

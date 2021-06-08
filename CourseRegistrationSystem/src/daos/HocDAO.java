@@ -17,8 +17,10 @@ public class HocDAO {
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		try {
 			h = (Hoc) session.get(Hoc.class, maHoc);
-			Hibernate.initialize(h.getHocID().getSinhVien());
-			Hibernate.initialize(h.getHocID().getLopHoc());
+			if (h != null) {
+				Hibernate.initialize(h.getHocID().getSinhVien());
+				Hibernate.initialize(h.getHocID().getLopHoc());
+			}
 		} catch (HibernateException ex) {
 			// Log the exception
 			System.err.println(ex);
@@ -49,7 +51,7 @@ public class HocDAO {
 		}
 		return ds;
 	}
-	
+
 	public static boolean themHoc(Hoc hoc) {
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		if (HocDAO.layThongTinHoc(hoc.getHocID()) != null) {

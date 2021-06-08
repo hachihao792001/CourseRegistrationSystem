@@ -32,7 +32,7 @@ public class HocPhanDAO {
 		List<HocPhan> ds = null;
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		try {
-			String hql = "select sv from HocPhan sv";
+			String hql = "select hp from HocPhan hp";
 			@SuppressWarnings("unchecked")
 			Query<HocPhan> query = session.createQuery(hql);
 			ds = query.list();
@@ -122,6 +122,22 @@ public class HocPhanDAO {
 
 	public static Object[][] getObjectMatrix() {
 		List<HocPhan> ds = layDanhSachHocPhan();
+		Object[][] data = new Object[ds.size()][8];
+		for (int i = 0; i < data.length; i++) {
+			data[i][0] = ds.get(i).getMonHoc().getMaMH();
+			data[i][1] = ds.get(i).getMonHoc().getTenMH();
+			data[i][2] = ds.get(i).getMonHoc().getSoTinChi();
+			data[i][3] = ds.get(i).getGvlt().getTenGV();
+			data[i][4] = ds.get(i).getTenPhong();
+			data[i][5] = ds.get(i).getThu();
+			data[i][6] = ds.get(i).getCa();
+			data[i][7] = ds.get(i).getSlotToiDa();
+		}
+
+		return data;
+	}
+
+	public static Object[][] getObjectMatrix(List<HocPhan> ds) {
 		Object[][] data = new Object[ds.size()][8];
 		for (int i = 0; i < data.length; i++) {
 			data[i][0] = ds.get(i).getMonHoc().getMaMH();

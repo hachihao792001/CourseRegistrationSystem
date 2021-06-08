@@ -85,6 +85,7 @@ public class AccountInfoPanel extends JPanel implements ActionListener {
 			JTextField newPassText = new JTextField();
 			newPassText.setPreferredSize(new Dimension(100, 20));
 			JButton changeButton = new JButton("Đổi");
+			changePassDialog.getRootPane().setDefaultButton(changeButton);
 			changeButton.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {

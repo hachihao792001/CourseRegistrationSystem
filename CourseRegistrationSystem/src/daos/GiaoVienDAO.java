@@ -24,6 +24,23 @@ public class GiaoVienDAO {
 		return gv;
 	}
 
+	public static GiaoVien layThongTinGiaoVien(String tenGV) {
+		GiaoVien gv = null;
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		try {
+			String hql = String.format("select gv from GiaoVien gv where gv.tenGV = '%s'", tenGV);
+			@SuppressWarnings("unchecked")
+			Query<GiaoVien> query = session.createQuery(hql);
+			gv = query.list().get(0);
+		} catch (HibernateException ex) {
+			// Log the exception
+			System.err.println(ex);
+		} finally {
+			session.close();
+		}
+		return gv;
+	}
+
 	public static List<GiaoVien> layDanhSachGiaoVien() {
 		List<GiaoVien> ds = null;
 		Session session = HibernateUtil.getSessionFactory().openSession();
@@ -41,7 +58,7 @@ public class GiaoVienDAO {
 		}
 		return ds;
 	}
-	
+
 	public static boolean themGiaoVien(GiaoVien gv) {
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		if (GiaoVienDAO.layThongTinGiaoVien(gv.getMaGV()) != null) {
