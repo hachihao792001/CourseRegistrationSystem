@@ -44,8 +44,8 @@ public class TaiKhoanPanel extends JPanel implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		switch (e.getActionCommand()) {
 		case "Tìm tài khoản": {
-			MultiTextFieldDialog timTaiKhoanDialog = new MultiTextFieldDialog(new String[] { "Tên tài khoản cần tìm" },
-					new String[] { "" }, "Tìm tài khoản");
+			EnterInputDialog timTaiKhoanDialog = new EnterInputDialog(new String[] { "Tên tài khoản cần tìm" },
+					new JComponent[] { new JTextField() }, new String[] { "" }, "Tìm tài khoản");
 			String tenTaiKhoanCanTim = timTaiKhoanDialog.showDialog()[0];
 			if (tenTaiKhoanCanTim == null)
 				break;
@@ -67,9 +67,11 @@ public class TaiKhoanPanel extends JPanel implements ActionListener {
 		}
 
 		case "Thêm tài khoản": {
-			MultiTextFieldDialog themTaiKhoanDialog = new MultiTextFieldDialog(
-					new String[] { "Tài khoản", "Tên giáo vụ", "Giới tính", "Ngày sinh" }, new String[4],
-					"Thêm tài khoản");
+			EnterInputDialog themTaiKhoanDialog = new EnterInputDialog(
+					new String[] { "Tài khoản", "Tên giáo vụ", "Giới tính", "Ngày sinh" },
+					new JComponent[] { new JTextField(), new JTextField(), new JComboBox<String>(Main.dsGioiTinh),
+							new JFormattedTextField(Main.dateFormat) },
+					new String[4], "Thêm tài khoản");
 			String[] thongTinTaiKhoanMoi = themTaiKhoanDialog.showDialog();
 			if (thongTinTaiKhoanMoi == null)
 				break;
@@ -82,14 +84,14 @@ public class TaiKhoanPanel extends JPanel implements ActionListener {
 				try {
 					TaiKhoan taiKhoanMoi = new TaiKhoan();
 					taiKhoanMoi.setTenTaiKhoan(thongTinTaiKhoanMoi[0]);
-					taiKhoanMoi.setMatKhau("123");
+					taiKhoanMoi.setMatKhau(Main.hash("admin".toCharArray()));
 					taiKhoanMoi.setLoai("GV");
 
 					GiaoVu newGiaoVu = new GiaoVu();
 					newGiaoVu.setTaiKhoan(taiKhoanMoi);
 					newGiaoVu.setTenGiaoVu(thongTinTaiKhoanMoi[1]);
 					newGiaoVu.setGioiTinh(thongTinTaiKhoanMoi[2]);
-					newGiaoVu.setNgSinh(new SimpleDateFormat("dd/MM/yyyy").parse(thongTinTaiKhoanMoi[3]));
+					newGiaoVu.setNgSinh(Main.dateFormat.parse(thongTinTaiKhoanMoi[3]));
 
 					TaiKhoanDAO.themTaiKhoan(taiKhoanMoi);
 					GiaoVuDAO.themGiaoVu(newGiaoVu);
@@ -116,9 +118,11 @@ public class TaiKhoanPanel extends JPanel implements ActionListener {
 					.toString();
 			GiaoVu selectedGiaoVu = TaiKhoanDAO.layGiaoVu(taiKhoanCanCapNhat);
 
-			MultiTextFieldDialog capNhatThongTinDialog;
-			capNhatThongTinDialog = new MultiTextFieldDialog(
+			EnterInputDialog capNhatThongTinDialog;
+			capNhatThongTinDialog = new EnterInputDialog(
 					new String[] { "Mã giáo vụ: ", "Tên giáo vụ: ", "Giới tính: ", "Ngày sinh: " },
+					new JComponent[] { new JTextField(), new JTextField(), new JComboBox<String>(Main.dsGioiTinh),
+							new JFormattedTextField(Main.dateFormat) },
 					new String[] { "" + selectedGiaoVu.getMaGVu(), selectedGiaoVu.getTenGiaoVu(),
 							selectedGiaoVu.getGioiTinh(),
 							new SimpleDateFormat("dd/MM/yyyy").format(selectedGiaoVu.getNgSinh()) },
@@ -151,7 +155,7 @@ public class TaiKhoanPanel extends JPanel implements ActionListener {
 			if (JOptionPane.showConfirmDialog(this, "Bạn có chắc muốn reset mật khẩu của tài khoản " + taiKhoanCanReset,
 					"Reset mật khẩu", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
 				TaiKhoan tk = TaiKhoanDAO.layThongTinTaiKhoan(taiKhoanCanReset);
-				tk.setMatKhau("admin");
+				tk.setMatKhau(Main.hash("admin".toCharArray()));
 				TaiKhoanDAO.capNhatThongTinTaiKhoan(tk);
 
 				JOptionPane.showMessageDialog(this, "Reset mật khẩu thành công!", "Thông báo",
@@ -163,6 +167,11 @@ public class TaiKhoanPanel extends JPanel implements ActionListener {
 		case "Xoá tài khoản": {
 
 			String taiKhoanCanXoa = listPanel.theTable.getValueAt(listPanel.theTable.getSelectedRow(), 0).toString();
+			if (taiKhoanCanXoa.equals(MainScreen.loggedInTK.getTenTaiKhoan())) {
+				JOptionPane.showMessageDialog(this, "Không thể xoá tài khoản đang được đăng nhập", "Lỗi",
+						JOptionPane.ERROR_MESSAGE, null);
+				break;
+			}
 
 			if (JOptionPane.showConfirmDialog(this, "Bạn có chắc muốn xoá tài khoản " + taiKhoanCanXoa, "Xoá tài khoản",
 					JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {

@@ -46,15 +46,13 @@ public class DKHP {
 	}
 
 	private DKHPID dkhpID;
-	private Date thoiGianHoc;
 	private Date thoiGianDKHP;
 
 	public DKHP() {
 	}
 
-	public DKHP(DKHPID dkhpID, Date thoiGianHoc, Date thoiGianDKHP) {
+	public DKHP(DKHPID dkhpID, Date thoiGianDKHP) {
 		this.dkhpID = dkhpID;
-		this.thoiGianHoc = thoiGianHoc;
 		this.thoiGianDKHP = thoiGianDKHP;
 	}
 
@@ -64,14 +62,6 @@ public class DKHP {
 
 	public void setDkhpID(DKHPID dkhpID) {
 		this.dkhpID = dkhpID;
-	}
-
-	public Date getThoiGianHoc() {
-		return thoiGianHoc;
-	}
-
-	public void setThoiGianHoc(Date thoiGianHoc) {
-		this.thoiGianHoc = thoiGianHoc;
 	}
 
 	public Date getThoiGianDKHP() {

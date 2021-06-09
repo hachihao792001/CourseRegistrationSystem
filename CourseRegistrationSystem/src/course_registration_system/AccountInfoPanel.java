@@ -27,9 +27,14 @@ public class AccountInfoPanel extends JPanel implements ActionListener {
 	TaiKhoanPanel taiKhoanPanel;
 
 	public AccountInfoPanel(TaiKhoan tk, TaiKhoanPanel taiKhoanPanel) {
+		this(tk);
+		this.taiKhoanPanel = taiKhoanPanel;
+	}
+
+	public AccountInfoPanel(TaiKhoan tk) {
 		this.setLayout(new GridBagLayout());
 		this.tk = tk;
-		this.taiKhoanPanel = taiKhoanPanel;
+
 		this.setBorder(BorderFactory.createTitledBorder("Thông tin tài khoản"));
 
 		GBCBuilder gbc;
@@ -79,22 +84,23 @@ public class AccountInfoPanel extends JPanel implements ActionListener {
 			JPanel changePassDialogContent = new JPanel(new GridBagLayout());
 
 			JLabel oldPassLabel = new JLabel("Nhập mật khẩu cũ");
-			JTextField oldPassText = new JTextField();
+			JPasswordField oldPassText = new JPasswordField();
 			oldPassText.setPreferredSize(new Dimension(100, 20));
 			JLabel newPassLabel = new JLabel("Nhập mật khẩu cũ");
-			JTextField newPassText = new JTextField();
+			JPasswordField newPassText = new JPasswordField();
 			newPassText.setPreferredSize(new Dimension(100, 20));
 			JButton changeButton = new JButton("Đổi");
 			changePassDialog.getRootPane().setDefaultButton(changeButton);
 			changeButton.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					if (oldPassText.getText().equals(tk.getMatKhau())) {
-						if (newPassText.getText().equals(oldPassText.getText())) {
+					if (Main.hash(oldPassText.getPassword()).equals(tk.getMatKhau())) {
+						if (String.valueOf(newPassText.getPassword())
+								.equals(String.valueOf(oldPassText.getPassword()))) {
 							JOptionPane.showMessageDialog(changePassDialog, "Mật khẩu mới không được giống mật khẩu cũ",
 									"Lỗi đổi mật khẩu", JOptionPane.WARNING_MESSAGE, null);
 						} else {
-							tk.setMatKhau(newPassText.getText());
+							tk.setMatKhau(Main.hash(newPassText.getPassword()));
 							TaiKhoanDAO.capNhatThongTinTaiKhoan(tk);
 							JOptionPane.showMessageDialog(changePassDialog, "Đổi mật khẩu thành công!", "Thông báo",
 									JOptionPane.INFORMATION_MESSAGE, null);
@@ -119,6 +125,7 @@ public class AccountInfoPanel extends JPanel implements ActionListener {
 
 			changePassDialog.setModalityType(JDialog.DEFAULT_MODALITY_TYPE);
 			changePassDialog.pack();
+			changePassDialog.setLocationRelativeTo(null);
 			changePassDialog.setVisible(true);
 			break;
 
@@ -135,18 +142,23 @@ public class AccountInfoPanel extends JPanel implements ActionListener {
 		}
 
 		case "update": {
-			MultiTextFieldDialog updateInfoDialog;
+			EnterInputDialog updateInfoDialog;
 			if (tk.getLoai().equals("GV")) {
-				updateInfoDialog = new MultiTextFieldDialog(
+				updateInfoDialog = new EnterInputDialog(
 						new String[] { "Mã giáo vụ: ", "Tên giáo vụ: ", "Giới tính: ", "Ngày sinh: " },
+						new JComponent[] { new JTextField(), new JTextField(),
+								new JComboBox<String>(new String[] { "Nam", "Nữ" }),
+								new JFormattedTextField(Main.dateFormat) },
 						new String[] { "" + gvu.getMaGVu(), gvu.getTenGiaoVu(), gvu.getGioiTinh(),
-								new SimpleDateFormat("dd/MM/yyyy").format(gvu.getNgSinh()) },
+								Main.dateFormat.format(gvu.getNgSinh()) },
 						"Cập nhật thông tin");
 			} else {
-				updateInfoDialog = new MultiTextFieldDialog(
-						new String[] { "Mã số sinh viên: ", "Họ tên: ", "Giới tính: ", "Ngày sinh: ", "Khoa: " },
-						new String[] { "" + sv.getMssv(), sv.getHoTen(), sv.getGioiTinh(),
-								new SimpleDateFormat("dd/MM/yyyy").format(sv.getNgSinh()), sv.getKhoa() },
+				updateInfoDialog = new EnterInputDialog(
+						new String[] { "Họ tên: ", "Giới tính: ", "Ngày sinh: ", "Khoa: " },
+						new JComponent[] { new JTextField(), new JComboBox<String>(new String[] { "Nam", "Nữ" }),
+								new JFormattedTextField(Main.dateFormat), new JTextField() },
+						new String[] { sv.getHoTen(), sv.getGioiTinh(), Main.dateFormat.format(sv.getNgSinh()),
+								sv.getKhoa() },
 						"Cập nhật thông tin");
 			}
 
@@ -167,11 +179,10 @@ public class AccountInfoPanel extends JPanel implements ActionListener {
 						taiKhoanPanel.listPanel.updateTable(GiaoVuDAO.getObjectMatrix());
 
 					} else {
-						sv.setMssv(Integer.parseInt(result[0]));
-						sv.setHoTen(result[1]);
-						sv.setGioiTinh(result[2]);
-						sv.setNgSinh(new SimpleDateFormat("dd/MM/yyyy").parse((result[3])));
-						sv.setKhoa(result[4]);
+						sv.setHoTen(result[0]);
+						sv.setGioiTinh(result[1]);
+						sv.setNgSinh(Main.dateFormat.parse((result[2])));
+						sv.setKhoa(result[3]);
 
 						SinhVienDAO.capNhatThongTinSinhVien(sv);
 						theJList.setListData(new String[] { "Tài khoản: " + sv.getTaiKhoan().getTenTaiKhoan(),
@@ -184,8 +195,8 @@ public class AccountInfoPanel extends JPanel implements ActionListener {
 					JOptionPane.showMessageDialog(updateInfoDialog, "Cập nhật thông tin thành công!", "Thông báo",
 							JOptionPane.INFORMATION_MESSAGE, null);
 
-				} catch (NumberFormatException | ParseException ex) {
-					JOptionPane.showMessageDialog(updateInfoDialog, "Sai định dạng", "Lỗi cập nhật thông tin",
+				} catch (ParseException ex) {
+					JOptionPane.showMessageDialog(updateInfoDialog, "Sai định dạng ngày", "Lỗi cập nhật thông tin",
 							JOptionPane.WARNING_MESSAGE, null);
 				}
 			}

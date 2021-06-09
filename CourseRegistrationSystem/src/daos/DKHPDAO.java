@@ -17,9 +17,34 @@ public class DKHPDAO {
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		try {
 			h = (DKHP) session.get(DKHP.class, maDKHP);
+			if (h != null) {
+				Hibernate.initialize(h.getDkhpID().getSinhVien());
+				Hibernate.initialize(h.getDkhpID().getHocPhan());
+				Hibernate.initialize(h.getDkhpID().getHocPhan().getMonHoc());
+			}
+		} catch (HibernateException ex) {
+			// Log the exception
+			System.err.println(ex);
+		} finally {
+			session.close();
+		}
+		return h;
+	}
+
+	public static DKHP layThongTinDKHP(HocPhan hp, SinhVien sv) {
+		DKHP h = null;
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		try {
+			String hql = String.format(
+					"select dk from DKHP dk where dk.dkhpID.hocPhan.maHP = %s and dk.dkhpID.sinhVien.mssv = %s",
+					hp.getMaHP(), sv.getMssv());
+			@SuppressWarnings("unchecked")
+			Query<DKHP> query = session.createQuery(hql);
+			h = query.list().get(0);
 			Hibernate.initialize(h.getDkhpID().getSinhVien());
 			Hibernate.initialize(h.getDkhpID().getHocPhan());
 			Hibernate.initialize(h.getDkhpID().getHocPhan().getMonHoc());
+
 		} catch (HibernateException ex) {
 			// Log the exception
 			System.err.println(ex);
@@ -63,6 +88,7 @@ public class DKHPDAO {
 			for (DKHP h : ds) {
 				Hibernate.initialize(h.getDkhpID().getSinhVien());
 				Hibernate.initialize(h.getDkhpID().getHocPhan());
+				Hibernate.initialize(h.getDkhpID().getHocPhan().getGvlt());
 				Hibernate.initialize(h.getDkhpID().getHocPhan().getMonHoc());
 			}
 
@@ -145,14 +171,16 @@ public class DKHPDAO {
 	}
 
 	public static Object[][] getObjectMatrix(List<DKHP> ds) {
-		Object[][] data = new Object[ds.size()][6];
+		Object[][] data = new Object[ds.size()][8];
 		for (int i = 0; i < data.length; i++) {
 			data[i][0] = ds.get(i).getDkhpID().getSinhVien().getMssv();
 			data[i][1] = ds.get(i).getDkhpID().getSinhVien().getHoTen();
 			data[i][2] = ds.get(i).getDkhpID().getHocPhan().getMonHoc().getMaMH();
 			data[i][3] = ds.get(i).getDkhpID().getHocPhan().getMonHoc().getTenMH();
-			data[i][4] = ds.get(i).getThoiGianHoc();
-			data[i][5] = ds.get(i).getThoiGianDKHP();
+			data[i][4] = ds.get(i).getDkhpID().getHocPhan().getGvlt().getTenGV();
+			data[i][5] = ds.get(i).getDkhpID().getHocPhan().getThu();
+			data[i][6] = ds.get(i).getDkhpID().getHocPhan().getCa();
+			data[i][7] = ds.get(i).getThoiGianDKHP();
 		}
 
 		return data;

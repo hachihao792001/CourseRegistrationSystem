@@ -62,6 +62,27 @@ public class HocKiDAO {
 		return ds;
 	}
 
+	public static List<KyDKHP> layDanhSachKyDKHPTrongHocKi(HocKi hk) {
+		List<KyDKHP> ds = null;
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		try {
+			String hql = "select dk from KyDKHP dk, HocKi hk where dk.kyDKHPID.hocKi.maHK = hk.maHK and hk.maHK = "
+					+ hk.getMaHK();
+			@SuppressWarnings("unchecked")
+			Query<KyDKHP> query = session.createQuery(hql);
+			ds = query.list();
+			for (KyDKHP kyDKHP : ds)
+				Hibernate.initialize(kyDKHP.getKyDKHPID().getHocKi());
+
+		} catch (HibernateException ex) {
+			// Log the exception
+			System.err.println(ex);
+		} finally {
+			session.close();
+		}
+		return ds;
+	}
+
 	public static List<HocPhan> layDanhSachHocPhanTrongHocKi(HocKi hk) {
 		List<HocPhan> ds = null;
 		Session session = HibernateUtil.getSessionFactory().openSession();

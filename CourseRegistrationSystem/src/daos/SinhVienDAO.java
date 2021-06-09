@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
@@ -122,11 +123,63 @@ public class SinhVienDAO {
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		try {
 			String hql = "select mh from MonHoc as mh, DKHP as dkhp "
-					+ "where mh.maMH = dkhp.dkhpID.hocPhan.monHoc.maMH" + " and dkhp.dkhpID.sinhVien.mssv = '" + mssv
-					+ "'";
+					+ "where mh.maMH = dkhp.dkhpID.hocPhan.monHoc.maMH" + " and dkhp.dkhpID.sinhVien.mssv = " + mssv;
 			@SuppressWarnings("unchecked")
 			Query<MonHoc> query = session.createQuery(hql);
 			ds = query.list();
+
+		} catch (HibernateException ex) {
+			// Log the exception
+			System.err.println(ex);
+		} finally {
+			session.close();
+		}
+		return ds;
+	}
+
+	public static List<HocPhan> layDanhSachHocPhanDaDKTrongHocKy(int mssv, int maHK) {
+		List<HocPhan> ds = null;
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		try {
+			String hql = String.format("select hp from HocPhan hp where hp.maHP "
+					+ "in (select hp2.maHP from HocPhan hp2, DKHP dkhp where hp2.monHoc.maMH = dkhp.dkhpID.hocPhan.monHoc.maMH and dkhp.dkhpID.sinhVien.mssv = %d) "
+					+ "and hp.maHP in (select hp3.maHP from HocPhan hp3, HocKi hk where hp3.kyDKHP.kyDKHPID.hocKi.maHK = hk.maHK and hk.maHK = %d)",
+					mssv, maHK);
+			@SuppressWarnings("unchecked")
+			Query<HocPhan> query = session.createQuery(hql);
+			ds = query.list();
+			for (HocPhan hp : ds) {
+				Hibernate.initialize(hp.getMonHoc());
+				Hibernate.initialize(hp.getGvlt());
+				Hibernate.initialize(hp.getKyDKHP());
+			}
+
+		} catch (HibernateException ex) {
+			// Log the exception
+			System.err.println(ex);
+		} finally {
+			session.close();
+		}
+		return ds;
+	}
+
+	public static List<HocPhan> layDanhSachHocPhanChuaDKTrongHocKy(int mssv, int maHK) {
+		List<HocPhan> ds = null;
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		try {
+			String hql = String.format("select hp from HocPhan hp where hp.maHP "
+					+ "not in (select hp2.maHP from HocPhan hp2, DKHP dkhp where hp2.monHoc.maMH = dkhp.dkhpID.hocPhan.monHoc.maMH and dkhp.dkhpID.sinhVien.mssv = %d) "
+					+ "and hp.maHP in (select hp3.maHP from HocPhan hp3, HocKi hk where hp3.kyDKHP.kyDKHPID.hocKi.maHK = hk.maHK and hk.maHK = %d)",
+					mssv, maHK);
+
+			@SuppressWarnings("unchecked")
+			Query<HocPhan> query = session.createQuery(hql);
+			ds = query.list();
+			for (HocPhan hp : ds) {
+				Hibernate.initialize(hp.getMonHoc());
+				Hibernate.initialize(hp.getGvlt());
+				Hibernate.initialize(hp.getKyDKHP());
+			}
 
 		} catch (HibernateException ex) {
 			// Log the exception

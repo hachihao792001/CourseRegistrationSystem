@@ -1,6 +1,7 @@
 eclipse.preferences.version=1
 encoding//src/course_registration_system/AccountInfoPanel.java=UTF-8
 encoding//src/course_registration_system/DSSVDialog.java=UTF-8
+encoding//src/course_registration_system/EnterInputDialog.java=UTF-8
 encoding//src/course_registration_system/HocKiPanel.java=UTF-8
 encoding//src/course_registration_system/HocPhanPanel.java=UTF-8
 encoding//src/course_registration_system/InfoPanel.java=UTF-8
@@ -11,5 +12,7 @@ encoding//src/course_registration_system/LopHocPanel.java=UTF-8
 encoding//src/course_registration_system/Main.java=UTF-8
 encoding//src/course_registration_system/MainScreen.java=UTF-8
 encoding//src/course_registration_system/MonHocPanel.java=UTF-8
-encoding//src/course_registration_system/MultiTextFieldDialog.java=UTF-8
+encoding//src/course_registration_system/SVDKHPPanel.java=UTF-8
+encoding//src/course_registration_system/SVKetQuaDKHPPanel.java=UTF-8
 encoding//src/course_registration_system/TaiKhoanPanel.java=UTF-8
+encoding//src/daos/DKHPDAO.java=UTF-8

@@ -3,7 +3,6 @@ package course_registration_system;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
@@ -62,8 +61,13 @@ public class HocPhanPanel extends JPanel implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		switch (e.getActionCommand()) {
 		case "Thêm học phần": {
-			MultiTextFieldDialog themHocPhanDialog = new MultiTextFieldDialog(new String[] { "Mã môn: ",
-					"Tên giáo viên lý thuyết: ", "Tên phòng học: ", "Thứ: ", "Ca: ", "Số slot tối đa: " },
+
+			EnterInputDialog themHocPhanDialog = new EnterInputDialog(
+					new String[] { "Mã môn: ", "Tên giáo viên lý thuyết: ", "Tên phòng học: ", "Thứ: ", "Ca: ",
+							"Số slot tối đa: " },
+					new JComponent[] { new JComboBox<String>(MonHocDAO.layDanhSachTenMonHoc()),
+							new JComboBox<String>(GiaoVienDAO.layDanhSachTenGV()), new JTextField(),
+							new JComboBox<String>(Main.dsThu), new JComboBox<String>(Main.dsCa), new JTextField() },
 					new String[8], "Thêm học phần");
 			String[] thongTinHocPhanMoi = themHocPhanDialog.showDialog();
 			if (thongTinHocPhanMoi == null)
@@ -83,8 +87,8 @@ public class HocPhanPanel extends JPanel implements ActionListener {
 					newHocPhan.setMonHoc(mh);
 					newHocPhan.setGvlt(gvlt);
 					newHocPhan.setTenPhong(thongTinHocPhanMoi[2]);
-					newHocPhan.setThu(Integer.parseInt(thongTinHocPhanMoi[3]));
-					newHocPhan.setCa(Integer.parseInt(thongTinHocPhanMoi[4]));
+					newHocPhan.setThu(thongTinHocPhanMoi[3]);
+					newHocPhan.setCa(thongTinHocPhanMoi[4]);
 					newHocPhan.setSlotToiDa(Integer.parseInt(thongTinHocPhanMoi[5]));
 
 					HocPhanDAO.themHocPhan(newHocPhan);
@@ -130,7 +134,7 @@ public class HocPhanPanel extends JPanel implements ActionListener {
 			JScrollPane theScrollPane = new JScrollPane();
 			JTable theTable = new JTable();
 			theTable.setModel(new DefaultTableModel(DKHPDAO.getObjectMatrix(DKHPDAO.layDanhSachDKHP(selectedHocPhan)),
-					new String[] { "MSSV", "Họ tên", "Mã môn học", "Tên môn học", "Tên gvlt", "Thời gian học",
+					new String[] { "MSSV", "Họ tên", "Mã môn học", "Tên môn học", "Tên gvlt", "Thứ", "Thời gian",
 							"Thời gian đăng kí học phần" }) {
 
 				private static final long serialVersionUID = 1L;
@@ -141,15 +145,16 @@ public class HocPhanPanel extends JPanel implements ActionListener {
 				}
 			});
 			theTable.setRowHeight(30);
-			theTable.setRowSelectionInterval(0, 0);
+			if (theTable.getRowCount() > 0)
+				theTable.setRowSelectionInterval(0, 0);
 			theScrollPane.setViewportView(theTable);
 
 			JButton timSVButton = new JButton("Tìm sinh viên");
 			timSVButton.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					MultiTextFieldDialog timSinhVienDialog = new MultiTextFieldDialog(new String[] { "MSSV cần tìm" },
-							new String[] { "" }, "Tìm sinh viên");
+					EnterInputDialog timSinhVienDialog = new EnterInputDialog(new String[] { "MSSV cần tìm" },
+							new JComponent[] { new JTextField() }, new String[] { "" }, "Tìm sinh viên");
 					String[] result = timSinhVienDialog.showDialog();
 					if (result == null)
 						return;

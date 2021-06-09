@@ -16,9 +16,6 @@ Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd
 
 		</composite-id>
 
-		<property name="thoiGianHoc" type="date">
-			<column length="10" name="ThoiGianHoc" />
-		</property>
 		<property name="thoiGianDKHP" type="date">
 			<column length="10" name="ThoiGianDKHP" />
 		</property>

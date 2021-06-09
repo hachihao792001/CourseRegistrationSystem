@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.DateTimeException;
 import java.util.List;
 
 import javax.swing.*;
@@ -65,12 +66,14 @@ public class KyDKHPPanel extends JPanel implements ActionListener {
 		case "Tao ky DKHP": {
 			HocKi hocKiHienTai = HocKiHienTaiDAO.layThongTinHocKiHienTai().getHk();
 
-			MultiTextFieldDialog themKyDKHPDialog = new MultiTextFieldDialog(
+			EnterInputDialog themKyDKHPDialog = new EnterInputDialog(
 					new String[] { "Năm học: ", "Học kì: ", "Ngày bắt đầu: ", "Ngày kết thúc: " },
+					new JComponent[] { new JTextField(), new JComboBox<String>(Main.dsTenHocKi),
+							new JFormattedTextField(Main.dateFormat), new JFormattedTextField(Main.dateFormat) },
 					new String[] { "" + hocKiHienTai.getNamHoc(), hocKiHienTai.getTenHocKi(), "", "", "" },
 					"Tạo kỳ đăng ký học phần mới ở học kỳ hiện tại");
-			themKyDKHPDialog.textFields.get(0).setEditable(false);
-			themKyDKHPDialog.textFields.get(1).setEditable(false);
+			themKyDKHPDialog.elementInputs[0].setEnabled(false);
+			themKyDKHPDialog.elementInputs[1].setEnabled(false);
 
 			String[] thongTinKyDKHPMoi = themKyDKHPDialog.showDialog();
 			if (thongTinKyDKHPMoi == null)
@@ -82,6 +85,8 @@ public class KyDKHPPanel extends JPanel implements ActionListener {
 				SimpleDateFormat dateFormat = new SimpleDateFormat("dd/mm/yyyy");
 				KyDKHP newKyDKHP = new KyDKHP(new KyDKHP.KyDKHPID(hocKiHienTai, cacKyDKHPTrongKyHienTai.size() + 1),
 						dateFormat.parse(thongTinKyDKHPMoi[2]), dateFormat.parse(thongTinKyDKHPMoi[3]));
+				if (newKyDKHP.getNgayBatDau().after(newKyDKHP.getNgayKetThuc()))
+					throw new DateTimeException("");
 
 				KyDKHPDAO.themKyDKHP(newKyDKHP);
 
@@ -92,6 +97,9 @@ public class KyDKHPPanel extends JPanel implements ActionListener {
 			} catch (ParseException e1) {
 				JOptionPane.showMessageDialog(this, "Ngày bị lỗi định dạng", "Lỗi thêm kỳ đăng ký học phần",
 						JOptionPane.WARNING_MESSAGE, null);
+			} catch (DateTimeException e2) {
+				JOptionPane.showMessageDialog(this, "Ngày bắt đầu phải trước ngày kết thúc",
+						"Lỗi thêm kỳ đăng ký học phần", JOptionPane.WARNING_MESSAGE, null);
 			}
 
 			break;

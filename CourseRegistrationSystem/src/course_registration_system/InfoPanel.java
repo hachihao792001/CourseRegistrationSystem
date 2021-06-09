@@ -48,8 +48,11 @@ public class InfoPanel extends JPanel {
 	public void updateInfo() {
 
 		String[] jListStrings = new String[elementNames.length];
-		for (int i = 0; i < elementNames.length; i++)
-			jListStrings[i] = elementNames[i] + elementDatas[i];
+		for (int i = 0; i < elementNames.length; i++) {
+			jListStrings[i] = elementNames[i];
+			if (elementDatas[i] != null)
+				jListStrings[i] += elementDatas[i];
+		}
 
 		theJList.setListData(jListStrings);
 	}

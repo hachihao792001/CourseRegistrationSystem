@@ -5,15 +5,15 @@ public class HocPhan {
 	private MonHoc monHoc;
 	private GiaoVien gvlt;
 	private String tenPhong;
-	private int thu;
-	private int ca;
+	private String thu;
+	private String ca;
 	private int slotToiDa;
 	private KyDKHP kyDKHP;
 
 	public HocPhan() {
 	}
 
-	public HocPhan(int maHP, MonHoc monHoc, GiaoVien gvlt, String tenPhong, int thu, int ca, int slotToiDa,
+	public HocPhan(int maHP, MonHoc monHoc, GiaoVien gvlt, String tenPhong, String thu, String ca, int slotToiDa,
 			KyDKHP kyDKHP) {
 		super();
 		this.maHP = maHP;
@@ -58,19 +58,19 @@ public class HocPhan {
 		this.tenPhong = tenPhong;
 	}
 
-	public int getThu() {
+	public String getThu() {
 		return thu;
 	}
 
-	public void setThu(int thu) {
+	public void setThu(String thu) {
 		this.thu = thu;
 	}
 
-	public int getCa() {
+	public String getCa() {
 		return ca;
 	}
 
-	public void setCa(int ca) {
+	public void setCa(String ca) {
 		this.ca = ca;
 	}
 

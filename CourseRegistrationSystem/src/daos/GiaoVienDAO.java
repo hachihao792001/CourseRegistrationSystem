@@ -59,6 +59,15 @@ public class GiaoVienDAO {
 		return ds;
 	}
 
+	public static String[] layDanhSachTenGV() {
+		List<GiaoVien> dsGV = layDanhSachGiaoVien();
+		String[] dsTenGV = new String[dsGV.size()];
+		for (int i = 0; i < dsGV.size(); i++)
+			dsTenGV[i] = dsGV.get(i).getTenGV();
+
+		return dsTenGV;
+	}
+
 	public static boolean themGiaoVien(GiaoVien gv) {
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		if (GiaoVienDAO.layThongTinGiaoVien(gv.getMaGV()) != null) {

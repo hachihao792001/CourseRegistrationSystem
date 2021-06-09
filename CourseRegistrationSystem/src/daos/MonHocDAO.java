@@ -41,6 +41,15 @@ public class MonHocDAO {
 		return ds;
 	}
 
+	public static String[] layDanhSachTenMonHoc() {
+		List<MonHoc> dsMonHoc = layDanhSachMonHoc();
+		String[] dsTenMonHoc = new String[dsMonHoc.size()];
+		for (int i = 0; i < dsMonHoc.size(); i++)
+			dsTenMonHoc[i] = dsMonHoc.get(i).getTenMH();
+
+		return dsTenMonHoc;
+	}
+
 	public static boolean themMonHoc(MonHoc mh) {
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		if (MonHocDAO.layThongTinMonHoc(mh.getMaMH()) != null) {
@@ -109,7 +118,7 @@ public class MonHocDAO {
 		}
 		return true;
 	}
-	
+
 	public static Object[][] getObjectMatrix() {
 		List<MonHoc> ds = layDanhSachMonHoc();
 		Object[][] data = new Object[ds.size()][3];

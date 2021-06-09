@@ -68,6 +68,7 @@ public class DSSVDialog extends JDialog implements ActionListener {
 		this.setTitle("Danh sách sinh viên trong lớp " + lopHoc.getMaLop());
 		this.setModalityType(JDialog.DEFAULT_MODALITY_TYPE);
 		this.pack();
+		this.setLocationRelativeTo(null);
 		this.setVisible(true);
 	}
 
@@ -75,8 +76,8 @@ public class DSSVDialog extends JDialog implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		switch (e.getActionCommand()) {
 		case "Tìm sinh viên": {
-			MultiTextFieldDialog timSinhVienDialog = new MultiTextFieldDialog(new String[] { "MSSV cần tìm" },
-					new String[] { "" }, "Tìm sinh viên");
+			EnterInputDialog timSinhVienDialog = new EnterInputDialog(new String[] { "MSSV cần tìm" },
+					new JComponent[] { new JTextField() }, new String[] { "" }, "Tìm sinh viên");
 			String[] result = timSinhVienDialog.showDialog();
 			if (result == null)
 				break;
@@ -149,9 +150,12 @@ public class DSSVDialog extends JDialog implements ActionListener {
 			int mssvCanCapNhat = Integer.parseInt(infoPanel.elementDatas[0]);
 			SinhVien selectedSV = SinhVienDAO.layThongTinSinhVien(mssvCanCapNhat);
 
-			MultiTextFieldDialog capNhatThongTinDialog;
-			capNhatThongTinDialog = new MultiTextFieldDialog(
+			EnterInputDialog capNhatThongTinDialog;
+			capNhatThongTinDialog = new EnterInputDialog(
 					new String[] { "Mã số sinh viên: ", "Họ tên: ", "Giới tính: ", "Ngày sinh: ", "Khoa: " },
+					new JComponent[] { new JTextField(), new JTextField(),
+							new JComboBox<String>(new String[] { "Nam", "Nữ" }),
+							new JFormattedTextField(Main.dateFormat), new JTextField() },
 					new String[] { "" + selectedSV.getMssv(), selectedSV.getHoTen(), selectedSV.getGioiTinh(),
 							new SimpleDateFormat("dd/mm/yyyy").format(selectedSV.getNgSinh()), selectedSV.getKhoa() },
 					"Cập nhật thông tin");

@@ -32,13 +32,18 @@ public class ListPanel extends JPanel {
 		if (infoPanel != null) {
 			theTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 				public void valueChanged(ListSelectionEvent event) {
-					int selectedRow = theTable.getSelectedRow();
-					if (selectedRow == -1)
-						selectedRow = 0;
-					for (int i = 0; i < infoPanel.elementDatas.length; i++)
-						infoPanel.elementDatas[i] = theTable.getValueAt(selectedRow, i).toString();
-
+					if (theTable.getRowCount() > 0) {
+						int selectedRow = theTable.getSelectedRow();
+						if (selectedRow == -1)
+							selectedRow = 0;
+						for (int i = 0; i < infoPanel.elementDatas.length; i++)
+							infoPanel.elementDatas[i] = theTable.getValueAt(selectedRow, i).toString();
+					} else {
+						for (int i = 0; i < infoPanel.elementDatas.length; i++)
+							infoPanel.elementDatas[i] = "";
+					}
 					infoPanel.updateInfo();
+
 				}
 			});
 		}
@@ -71,6 +76,7 @@ public class ListPanel extends JPanel {
 	}
 
 	public void setTableSelectedRow(int row) {
-		theTable.setRowSelectionInterval(row, row);
+		if (theTable.getRowCount() > 0)
+			theTable.setRowSelectionInterval(row, row);
 	}
 }

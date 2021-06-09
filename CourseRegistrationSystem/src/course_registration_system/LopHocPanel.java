@@ -37,9 +37,10 @@ public class LopHocPanel extends JPanel implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		switch (e.getActionCommand()) {
 		case "Thêm lớp học": {
-			MultiTextFieldDialog themLopHocDialog = new MultiTextFieldDialog(
-					new String[] { "Mã lớp: ", "Tổng số sinh viên: ", "Tổng số nam: ", "Tổng số nữ: " }, new String[4],
-					"Thêm lớp học");
+			EnterInputDialog themLopHocDialog = new EnterInputDialog(
+					new String[] { "Mã lớp: ", "Tổng số sinh viên: ", "Tổng số nam: ", "Tổng số nữ: " },
+					new JComponent[] { new JTextField(), new JTextField(), new JTextField(), new JTextField() },
+					new String[4], "Thêm lớp học");
 			String[] thongTinLopHocMoi = themLopHocDialog.showDialog();
 			if (thongTinLopHocMoi == null)
 				break;

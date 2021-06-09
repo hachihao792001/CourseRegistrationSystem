@@ -7,6 +7,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.DateTimeException;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -70,9 +71,11 @@ public class HocKiPanel extends JPanel implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		switch (e.getActionCommand()) {
 		case "Thêm học kì": {
-			MultiTextFieldDialog themHocKiDialog = new MultiTextFieldDialog(
-					new String[] { "Tên học kì", "Năm học", "Ngày bắt đầu", "Ngày kết thúc" }, new String[4],
-					"Thêm học kì");
+			EnterInputDialog themHocKiDialog = new EnterInputDialog(
+					new String[] { "Tên học kì", "Năm học", "Ngày bắt đầu", "Ngày kết thúc" },
+					new JComponent[] { new JComboBox<String>(new String[] { "HK1", "HK2", "HK3" }), new JTextField(),
+							new JFormattedTextField(Main.dateFormat), new JFormattedTextField(Main.dateFormat) },
+					new String[4], "Thêm học kì");
 			String[] thongTinHocKiMoi = themHocKiDialog.showDialog();
 			if (thongTinHocKiMoi == null)
 				break;
@@ -88,7 +91,10 @@ public class HocKiPanel extends JPanel implements ActionListener {
 					newHocKi.setTenHocKi(thongTinHocKiMoi[0]);
 					newHocKi.setNamHoc(Integer.parseInt(thongTinHocKiMoi[1]));
 					newHocKi.setNgayBatDau(new SimpleDateFormat("dd/mm/yyyy").parse(thongTinHocKiMoi[2]));
-					newHocKi.setNgayBatDau(new SimpleDateFormat("dd/mm/yyyy").parse(thongTinHocKiMoi[3]));
+					newHocKi.setNgayKetThuc(new SimpleDateFormat("dd/mm/yyyy").parse(thongTinHocKiMoi[3]));
+
+					if (newHocKi.getNgayBatDau().after(newHocKi.getNgayKetThuc()))
+						throw new DateTimeException("");
 
 					HocKiDAO.themHocKi(newHocKi);
 
@@ -103,6 +109,9 @@ public class HocKiPanel extends JPanel implements ActionListener {
 							JOptionPane.WARNING_MESSAGE, null);
 				} catch (ParseException e2) {
 					JOptionPane.showMessageDialog(this, "Sai định dạng ngày", "Lỗi thêm học kì",
+							JOptionPane.WARNING_MESSAGE, null);
+				} catch (DateTimeException e3) {
+					JOptionPane.showMessageDialog(this, "Ngày bắt đầu phải trước ngày kết thúc", "Lỗi thêm học kì",
 							JOptionPane.WARNING_MESSAGE, null);
 				}
 			}

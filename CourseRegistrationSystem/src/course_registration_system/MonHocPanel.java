@@ -6,7 +6,6 @@ import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
-
 import daos.MonHocDAO;
 import pojo.MonHoc;
 
@@ -39,12 +38,13 @@ public class MonHocPanel extends JPanel implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		switch (e.getActionCommand()) {
 		case "Tìm môn học": {
-			MultiTextFieldDialog timMonHocDialog = new MultiTextFieldDialog(new String[] { "Mã môn học cần tìm" },
-					new String[] { "" }, "Tìm môn học");
-			String maMonHocCanTim = timMonHocDialog.showDialog()[0];
-			if (maMonHocCanTim == null)
+			EnterInputDialog timMonHocDialog = new EnterInputDialog(new String[] { "Mã môn học cần tìm" },
+					new JComponent[] { new JTextField(), }, new String[] { "" }, "Tìm môn học");
+			String[] result = timMonHocDialog.showDialog();
+			if (result == null)
 				break;
-
+			String maMonHocCanTim = result[0];
+			
 			MonHoc mhTimDuoc = MonHocDAO.layThongTinMonHoc(maMonHocCanTim);
 			if (mhTimDuoc == null) {
 				JOptionPane.showMessageDialog(this, "Môn học không tồn tại", "Thông báo",
@@ -61,8 +61,11 @@ public class MonHocPanel extends JPanel implements ActionListener {
 			break;
 		}
 		case "Thêm môn học": {
-			MultiTextFieldDialog themMonHocDialog = new MultiTextFieldDialog(
-					new String[] { "Mã môn học", "Tên môn học", "Số tín chỉ" }, new String[4], "Thêm môn học");
+			EnterInputDialog themMonHocDialog = new EnterInputDialog(
+					new String[] { "Mã môn học", "Tên môn học", "Số tín chỉ" },
+					new JComponent[] { new JTextField(), new JTextField(),
+							new JComboBox<String>(new String[] { "1", "2", "3", "4" }) },
+					new String[4], "Thêm môn học");
 			String[] thongTinMonHocMoi = themMonHocDialog.showDialog();
 			if (thongTinMonHocMoi == null)
 				break;
@@ -97,8 +100,10 @@ public class MonHocPanel extends JPanel implements ActionListener {
 			String monHocCanCapNhat = infoPanel.elementDatas[0];
 			MonHoc selectedMonHoc = MonHocDAO.layThongTinMonHoc(monHocCanCapNhat);
 
-			MultiTextFieldDialog capNhatThongTinDialog;
-			capNhatThongTinDialog = new MultiTextFieldDialog(new String[] { "Mã môn học", "Tên môn học", "Số tín chỉ" },
+			EnterInputDialog capNhatThongTinDialog;
+			capNhatThongTinDialog = new EnterInputDialog(new String[] { "Mã môn học", "Tên môn học", "Số tín chỉ" },
+					new JComponent[] { new JTextField(), new JTextField(),
+							new JComboBox<String>(new String[] { "1", "2", "3", "4" }) },
 					new String[] { selectedMonHoc.getMaMH(), selectedMonHoc.getTenMH(),
 							"" + selectedMonHoc.getSoTinChi() },
 					"Cập nhật thông tin");
