@@ -34,7 +34,7 @@ public class TaiKhoanPanel extends JPanel implements ActionListener {
 		// ------------------------ LIST PANEL --------------------------------
 		listPanel = new ListPanel(infoPanel, GiaoVuDAO.getObjectMatrix(),
 				new String[] { "Tài khoản", "Tên giáo vụ", "Giới tính", "Ngày sinh" },
-				new String[] { "Tìm tài khoản", "Thêm tài khoản" }, this, "tài khoản");
+				new String[] { "Thêm tài khoản" }, this, "tài khoản");
 
 		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, listPanel, infoPanel);
 		this.add(splitPane, gbc.setGrid(1, 1).setFill(GridBagConstraints.BOTH).setWeight(1, 1).setInsets(0));
@@ -43,28 +43,6 @@ public class TaiKhoanPanel extends JPanel implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		switch (e.getActionCommand()) {
-		case "Tìm tài khoản": {
-			EnterInputDialog timTaiKhoanDialog = new EnterInputDialog(new String[] { "Tên tài khoản cần tìm" },
-					new JComponent[] { new JTextField() }, new String[] { "" }, "Tìm tài khoản");
-			String tenTaiKhoanCanTim = timTaiKhoanDialog.showDialog()[0];
-			if (tenTaiKhoanCanTim == null)
-				break;
-
-			TaiKhoan tkTimDuoc = TaiKhoanDAO.layThongTinTaiKhoan(tenTaiKhoanCanTim);
-			if (tkTimDuoc == null) {
-				JOptionPane.showMessageDialog(this, "Tài khoản không tồn tại", "Thông báo",
-						JOptionPane.INFORMATION_MESSAGE, null);
-			} else {
-				Object[][] giaoVuObjectMatrix = GiaoVuDAO.getObjectMatrix();
-				for (int i = 0; i < giaoVuObjectMatrix.length; i++) {
-					if (giaoVuObjectMatrix[i][0].equals(tkTimDuoc.getTenTaiKhoan())) {
-						listPanel.setTableSelectedRow(i);
-						break;
-					}
-				}
-			}
-			break;
-		}
 
 		case "Thêm tài khoản": {
 			EnterInputDialog themTaiKhoanDialog = new EnterInputDialog(
@@ -127,17 +105,20 @@ public class TaiKhoanPanel extends JPanel implements ActionListener {
 							selectedGiaoVu.getGioiTinh(),
 							new SimpleDateFormat("dd/MM/yyyy").format(selectedGiaoVu.getNgSinh()) },
 					"Cập nhật thông tin");
+			capNhatThongTinDialog.elementInputs[0].setEnabled(false);
 
 			String[] result = capNhatThongTinDialog.showDialog();
 			if (result != null) {
 				try {
-					selectedGiaoVu.setMaGVu(Integer.parseInt(result[0]));
 					selectedGiaoVu.setTenGiaoVu(result[1]);
 					selectedGiaoVu.setGioiTinh(result[2]);
 					selectedGiaoVu.setNgSinh(new SimpleDateFormat("dd/MM/yyyy").parse((result[3])));
 
 					GiaoVuDAO.capNhatThongTinGiaoVu(selectedGiaoVu);
 					listPanel.updateTable(GiaoVuDAO.getObjectMatrix());
+
+					if (taiKhoanCanCapNhat.equals(MainScreen.loggedInTK.getTenTaiKhoan()))
+						MainScreen.accountInfoPanel.updateAccountUI();
 
 					JOptionPane.showMessageDialog(capNhatThongTinDialog, "Cập nhật thông tin thành công!", "Thông báo",
 							JOptionPane.INFORMATION_MESSAGE, null);

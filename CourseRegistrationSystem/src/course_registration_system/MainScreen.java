@@ -1,6 +1,7 @@
 package course_registration_system;
 
-import java.awt.CardLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.util.Date;
 import java.util.List;
 
@@ -17,14 +18,14 @@ import pojo.TaiKhoan;
 public class MainScreen extends JFrame {
 
 	private static final long serialVersionUID = 1L;
-	private JPanel accountInfoPanel;
+	public static AccountInfoPanel accountInfoPanel;
 	private JTabbedPane mainJTabbedPane;
 	public static SinhVien loggedInSV;
 	public static TaiKhoan loggedInTK;
 
 	public MainScreen(TaiKhoan taiKhoan) {
 		loggedInTK = taiKhoan;
-		JPanel mainContent = new JPanel();
+		JPanel mainContent = new JPanel(new GridBagLayout());
 		mainJTabbedPane = new JTabbedPane();
 
 		if (taiKhoan.getLoai().equals("GV")) {
@@ -37,6 +38,7 @@ public class MainScreen extends JFrame {
 			mainJTabbedPane.addTab("Kỳ đăng ký học phần", new KyDKHPPanel());
 			mainJTabbedPane.addTab("Học phần", new HocPhanPanel());
 
+			accountInfoPanel = new AccountInfoPanel(taiKhoan, tkPanel);
 		} else {
 			loggedInSV = TaiKhoanDAO.laySinhVien(taiKhoan);
 
@@ -53,11 +55,12 @@ public class MainScreen extends JFrame {
 
 			mainJTabbedPane.addTab("Đăng ký học phần", new SVDKHPPanel(trongKyDKHP));
 			mainJTabbedPane.addTab("Kết quả đăng ký học phần", new SVKetQuaDKHPPanel(trongKyDKHP));
+
+			accountInfoPanel = new AccountInfoPanel(taiKhoan);
 		}
-		
-		accountInfoPanel = new AccountInfoPanel(taiKhoan);
+
 		JSplitPane mainSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, accountInfoPanel, mainJTabbedPane);
-		mainContent.add(mainSplitPane);
+		mainContent.add(mainSplitPane, new GBCBuilder(1, 1).setFill(GridBagConstraints.BOTH).setWeight(1, 1));
 
 		this.setTitle("Phần mềm đăng ký học phần");
 		this.setContentPane(mainContent);

@@ -34,7 +34,9 @@ public class HocKiDAO {
 					namHoc);
 			@SuppressWarnings("unchecked")
 			Query<HocKi> query = session.createQuery(hql);
-			hk = query.list().get(0);
+			List<HocKi> result = query.list();
+			if (result != null && result.size() > 0)
+				hk = result.get(0);
 		} catch (HibernateException ex) {
 			// Log the exception
 			System.err.println(ex);

@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
-import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
@@ -142,7 +141,7 @@ public class SinhVienDAO {
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		try {
 			String hql = String.format("select hp from HocPhan hp where hp.maHP "
-					+ "in (select hp2.maHP from HocPhan hp2, DKHP dkhp where hp2.monHoc.maMH = dkhp.dkhpID.hocPhan.monHoc.maMH and dkhp.dkhpID.sinhVien.mssv = %d) "
+					+ "in (select hp2.maHP from HocPhan hp2, DKHP dkhp where hp2.maHP = dkhp.dkhpID.hocPhan.maHP and dkhp.dkhpID.sinhVien.mssv = %d) "
 					+ "and hp.maHP in (select hp3.maHP from HocPhan hp3, HocKi hk where hp3.kyDKHP.kyDKHPID.hocKi.maHK = hk.maHK and hk.maHK = %d)",
 					mssv, maHK);
 			@SuppressWarnings("unchecked")

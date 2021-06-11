@@ -4,7 +4,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 
 import daos.LopHocDAO;
 import pojo.LopHoc;
@@ -78,8 +77,7 @@ public class LopHocPanel extends JPanel implements ActionListener {
 
 				LopHocDAO.xoaLopHoc(lopHocCanXoa);
 
-				listPanel.theTable.setModel(new DefaultTableModel(LopHocDAO.getObjectMatrix(),
-						new String[] { "Mã lớp: ", "Tổng số sinh viên: ", "Tổng số nam: ", "Tổng số nữ: " }));
+				listPanel.updateTable(LopHocDAO.getObjectMatrix());
 
 				JOptionPane.showMessageDialog(this, "Xoá lớp học thành công!", "Thông báo",
 						JOptionPane.INFORMATION_MESSAGE, null);

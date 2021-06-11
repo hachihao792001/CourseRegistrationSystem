@@ -16,9 +16,11 @@ public class HocPhanDAO {
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		try {
 			hp = (HocPhan) session.get(HocPhan.class, maHP);
-			Hibernate.initialize(hp.getMonHoc());
-			Hibernate.initialize(hp.getGvlt());
-			Hibernate.initialize(hp.getKyDKHP());
+			if (hp != null) {
+				Hibernate.initialize(hp.getMonHoc());
+				Hibernate.initialize(hp.getGvlt());
+				Hibernate.initialize(hp.getKyDKHP());
+			}
 		} catch (HibernateException ex) {
 			// Log the exception
 			System.err.println(ex);

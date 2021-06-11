@@ -6,11 +6,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.DateTimeException;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 
 import daos.HocKiDAO;
 import daos.HocKiHienTaiDAO;
@@ -29,13 +27,13 @@ public class HocKiPanel extends JPanel implements ActionListener {
 
 		// ------------------------ INFO PANEL --------------------------------
 		infoPanel = new InfoPanel(new String[] { "Tên học kì: ", "Năm học: ", "Ngày bắt đầu: ", "Ngày kết thúc: " },
-				new String[] { "Để thành học kì hiện tại" }, this);
+				new String[] { "Để thành học kì hiện tại", "Xoá học kì" }, this);
 		infoPanel.updateInfo();
 
 		// ------------------------ LIST PANEL --------------------------------
 		listPanel = new ListPanel(infoPanel, HocKiDAO.getObjectMatrix(),
 				new String[] { "Tên học kì", "Năm học", "Ngày bắt đầu", "Ngày kết thúc" },
-				new String[] { "Thêm học kì", "Xoá học kì" }, this, "học kì");
+				new String[] { "Thêm học kì" }, this, "học kì");
 
 		// ---------------- HOC KI HIEN TAI PANEL-----------------------------
 		JPanel hocKiHienTaiPanel = new JPanel();
@@ -45,6 +43,7 @@ public class HocKiPanel extends JPanel implements ActionListener {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				super.mouseClicked(e);
+				HocKi hocKiHienTai = HocKiHienTaiDAO.layThongTinHocKiHienTai().getHk();
 				Object[][] hocKiObjectMatrix = HocKiDAO.getObjectMatrix();
 				for (int i = 0; i < hocKiObjectMatrix.length; i++) {
 					if (hocKiObjectMatrix[i][0].equals(hocKiHienTai.getTenHocKi())
@@ -90,16 +89,15 @@ public class HocKiPanel extends JPanel implements ActionListener {
 					HocKi newHocKi = new HocKi();
 					newHocKi.setTenHocKi(thongTinHocKiMoi[0]);
 					newHocKi.setNamHoc(Integer.parseInt(thongTinHocKiMoi[1]));
-					newHocKi.setNgayBatDau(new SimpleDateFormat("dd/mm/yyyy").parse(thongTinHocKiMoi[2]));
-					newHocKi.setNgayKetThuc(new SimpleDateFormat("dd/mm/yyyy").parse(thongTinHocKiMoi[3]));
+					newHocKi.setNgayBatDau(Main.dateFormat.parse(thongTinHocKiMoi[2]));
+					newHocKi.setNgayKetThuc(Main.dateFormat.parse(thongTinHocKiMoi[3]));
 
 					if (newHocKi.getNgayBatDau().after(newHocKi.getNgayKetThuc()))
 						throw new DateTimeException("");
 
 					HocKiDAO.themHocKi(newHocKi);
 
-					listPanel.theTable.setModel(new DefaultTableModel(HocKiDAO.getObjectMatrix(),
-							new String[] { "Tên học kì", "Năm học", "Ngày bắt đầu", "Ngày kết thúc" }));
+					listPanel.updateTable(HocKiDAO.getObjectMatrix());
 					listPanel.setTableSelectedRow(listPanel.theTable.getRowCount() - 1);
 
 					JOptionPane.showMessageDialog(this, "Thêm học kì thành công!", "Thông báo",
@@ -128,8 +126,7 @@ public class HocKiPanel extends JPanel implements ActionListener {
 
 				HocKiDAO.xoaHocKi(hocKiCanXoa.getMaHK());
 
-				listPanel.theTable.setModel(new DefaultTableModel(HocKiDAO.getObjectMatrix(),
-						new String[] { "Tên học kì", "Năm học", "Ngày bắt đầu", "Ngày kết thúc" }));
+				listPanel.updateTable(HocKiDAO.getObjectMatrix());
 
 				JOptionPane.showMessageDialog(this, "Xoá học kì thành công!", "Thông báo",
 						JOptionPane.INFORMATION_MESSAGE, null);

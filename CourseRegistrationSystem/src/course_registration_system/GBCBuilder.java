@@ -3,7 +3,8 @@ package course_registration_system;
 import java.awt.*;
 
 public class GBCBuilder extends GridBagConstraints {
-
+	// Tham khảo https://horstmann.com/articles/Taming_the_GridBagLayout.html
+	// Phần trăm tham khảo: 5%
 	private static final long serialVersionUID = 1L;
 
 	public GBCBuilder(int gridx, int gridy) {

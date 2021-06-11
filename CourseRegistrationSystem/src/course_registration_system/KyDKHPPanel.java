@@ -4,7 +4,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.DateTimeException;
 import java.util.List;
 
@@ -82,9 +81,8 @@ public class KyDKHPPanel extends JPanel implements ActionListener {
 			try {
 
 				List<KyDKHP> cacKyDKHPTrongKyHienTai = KyDKHPDAO.layDanhSachKyDKHP(hocKiHienTai);
-				SimpleDateFormat dateFormat = new SimpleDateFormat("dd/mm/yyyy");
 				KyDKHP newKyDKHP = new KyDKHP(new KyDKHP.KyDKHPID(hocKiHienTai, cacKyDKHPTrongKyHienTai.size() + 1),
-						dateFormat.parse(thongTinKyDKHPMoi[2]), dateFormat.parse(thongTinKyDKHPMoi[3]));
+						Main.dateFormat.parse(thongTinKyDKHPMoi[2]), Main.dateFormat.parse(thongTinKyDKHPMoi[3]));
 				if (newKyDKHP.getNgayBatDau().after(newKyDKHP.getNgayKetThuc()))
 					throw new DateTimeException("");
 

@@ -75,6 +75,24 @@ public class AccountInfoPanel extends JPanel implements ActionListener {
 		this.add(capNhatThongTinButton, gbc.setGrid(1, 3).setSpan(2, 1));
 	}
 
+	public void updateAccountUI() {
+		if (tk.getLoai().equals("GV")) {
+			gvu = TaiKhoanDAO.layGiaoVu(tk.getTenTaiKhoan());
+			theJList.setListData(
+					new String[] { "Tài khoản: " + gvu.getTaiKhoan().getTenTaiKhoan(), "Mã giáo vụ: " + gvu.getMaGVu(),
+							"Tên giáo vụ: " + gvu.getTenGiaoVu(), "Giới tính: " + gvu.getGioiTinh(),
+							"Ngày sinh: " + new SimpleDateFormat("dd/MM/yyyy").format(gvu.getNgSinh()) });
+
+		} else {
+			sv = TaiKhoanDAO.laySinhVien(tk);
+			theJList.setListData(new String[] { "Tài khoản: " + sv.getTaiKhoan().getTenTaiKhoan(),
+					"Mã số sinh viên: " + sv.getMssv(), "Họ tên: " + sv.getHoTen(), "Giới tính: " + sv.getGioiTinh(),
+					"Ngày sinh: " + new SimpleDateFormat("dd/MM/yyyy").format(sv.getNgSinh()),
+					"Khoa: " + sv.getKhoa() });
+
+		}
+	}
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		switch (e.getActionCommand()) {
@@ -144,13 +162,10 @@ public class AccountInfoPanel extends JPanel implements ActionListener {
 		case "update": {
 			EnterInputDialog updateInfoDialog;
 			if (tk.getLoai().equals("GV")) {
-				updateInfoDialog = new EnterInputDialog(
-						new String[] { "Mã giáo vụ: ", "Tên giáo vụ: ", "Giới tính: ", "Ngày sinh: " },
-						new JComponent[] { new JTextField(), new JTextField(),
-								new JComboBox<String>(new String[] { "Nam", "Nữ" }),
+				updateInfoDialog = new EnterInputDialog(new String[] { "Tên giáo vụ: ", "Giới tính: ", "Ngày sinh: " },
+						new JComponent[] { new JTextField(), new JComboBox<String>(new String[] { "Nam", "Nữ" }),
 								new JFormattedTextField(Main.dateFormat) },
-						new String[] { "" + gvu.getMaGVu(), gvu.getTenGiaoVu(), gvu.getGioiTinh(),
-								Main.dateFormat.format(gvu.getNgSinh()) },
+						new String[] { gvu.getTenGiaoVu(), gvu.getGioiTinh(), Main.dateFormat.format(gvu.getNgSinh()) },
 						"Cập nhật thông tin");
 			} else {
 				updateInfoDialog = new EnterInputDialog(
@@ -166,10 +181,9 @@ public class AccountInfoPanel extends JPanel implements ActionListener {
 			if (result != null) {
 				try {
 					if (tk.getLoai().equals("GV")) {
-						gvu.setMaGVu(Integer.parseInt(result[0]));
-						gvu.setTenGiaoVu(result[1]);
-						gvu.setGioiTinh(result[2]);
-						gvu.setNgSinh(new SimpleDateFormat("dd/MM/yyyy").parse((result[3])));
+						gvu.setTenGiaoVu(result[0]);
+						gvu.setGioiTinh(result[1]);
+						gvu.setNgSinh(new SimpleDateFormat("dd/MM/yyyy").parse((result[2])));
 
 						GiaoVuDAO.capNhatThongTinGiaoVu(gvu);
 						theJList.setListData(new String[] { "Tài khoản: " + gvu.getTaiKhoan().getTenTaiKhoan(),

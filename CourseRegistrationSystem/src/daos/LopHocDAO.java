@@ -50,8 +50,9 @@ public class LopHocDAO {
 		List<SinhVien> ds = null;
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		try {
-			String hql = "select sv from SinhVien as sv, Hoc as hoc "
-					+ "where sv.mssv = hoc.hocID.sinhVien.mssv and hoc.hocID.lopHoc.maLop != '" + maLop + "'";
+			String hql = String.format("select sv from SinhVien sv where not exists"
+					+ " (select hoc from Hoc hoc where hoc.hocID.sinhVien.mssv = sv.mssv and hoc.hocID.lopHoc.maLop = '%s')",
+					maLop);
 			@SuppressWarnings("unchecked")
 			Query<SinhVien> query = session.createQuery(hql);
 			ds = query.list();

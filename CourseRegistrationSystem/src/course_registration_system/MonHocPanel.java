@@ -27,8 +27,8 @@ public class MonHocPanel extends JPanel implements ActionListener {
 		// ------------------------ LIST PANEL --------------------------------
 
 		listPanel = new ListPanel(infoPanel, MonHocDAO.getObjectMatrix(),
-				new String[] { "Mã môn học", "Tên môn học", "Số tín chỉ" },
-				new String[] { "Tìm môn học", "Thêm môn học" }, this, "môn học");
+				new String[] { "Mã môn học", "Tên môn học", "Số tín chỉ" }, new String[] { "Thêm môn học" }, this,
+				"môn học");
 
 		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, listPanel, infoPanel);
 		this.add(splitPane, gbc.setGrid(1, 1).setFill(GridBagConstraints.BOTH).setWeight(1, 1).setInsets(0));
@@ -37,29 +37,7 @@ public class MonHocPanel extends JPanel implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		switch (e.getActionCommand()) {
-		case "Tìm môn học": {
-			EnterInputDialog timMonHocDialog = new EnterInputDialog(new String[] { "Mã môn học cần tìm" },
-					new JComponent[] { new JTextField(), }, new String[] { "" }, "Tìm môn học");
-			String[] result = timMonHocDialog.showDialog();
-			if (result == null)
-				break;
-			String maMonHocCanTim = result[0];
-			
-			MonHoc mhTimDuoc = MonHocDAO.layThongTinMonHoc(maMonHocCanTim);
-			if (mhTimDuoc == null) {
-				JOptionPane.showMessageDialog(this, "Môn học không tồn tại", "Thông báo",
-						JOptionPane.INFORMATION_MESSAGE, null);
-			} else {
-				Object[][] monHocObjectMatrix = MonHocDAO.getObjectMatrix();
-				for (int i = 0; i < monHocObjectMatrix.length; i++) {
-					if (monHocObjectMatrix[i][0].equals(mhTimDuoc.getMaMH())) {
-						listPanel.setTableSelectedRow(i);
-						break;
-					}
-				}
-			}
-			break;
-		}
+
 		case "Thêm môn học": {
 			EnterInputDialog themMonHocDialog = new EnterInputDialog(
 					new String[] { "Mã môn học", "Tên môn học", "Số tín chỉ" },
@@ -101,19 +79,16 @@ public class MonHocPanel extends JPanel implements ActionListener {
 			MonHoc selectedMonHoc = MonHocDAO.layThongTinMonHoc(monHocCanCapNhat);
 
 			EnterInputDialog capNhatThongTinDialog;
-			capNhatThongTinDialog = new EnterInputDialog(new String[] { "Mã môn học", "Tên môn học", "Số tín chỉ" },
-					new JComponent[] { new JTextField(), new JTextField(),
-							new JComboBox<String>(new String[] { "1", "2", "3", "4" }) },
-					new String[] { selectedMonHoc.getMaMH(), selectedMonHoc.getTenMH(),
-							"" + selectedMonHoc.getSoTinChi() },
+			capNhatThongTinDialog = new EnterInputDialog(new String[] { "Tên môn học", "Số tín chỉ" },
+					new JComponent[] { new JTextField(), new JComboBox<String>(new String[] { "1", "2", "3", "4" }) },
+					new String[] { selectedMonHoc.getTenMH(), "" + selectedMonHoc.getSoTinChi() },
 					"Cập nhật thông tin");
 
 			String[] result = capNhatThongTinDialog.showDialog();
 			if (result != null) {
 				try {
-					selectedMonHoc.setMaMH(result[0]);
-					selectedMonHoc.setTenMH(result[1]);
-					selectedMonHoc.setSoTinChi(Integer.parseInt(result[2]));
+					selectedMonHoc.setTenMH(result[0]);
+					selectedMonHoc.setSoTinChi(Integer.parseInt(result[1]));
 
 					MonHocDAO.capNhatThongTinMonHoc(selectedMonHoc);
 					listPanel.updateTable(MonHocDAO.getObjectMatrix());

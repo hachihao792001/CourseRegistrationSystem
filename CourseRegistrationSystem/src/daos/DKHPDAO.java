@@ -36,7 +36,7 @@ public class DKHPDAO {
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		try {
 			String hql = String.format(
-					"select dk from DKHP dk where dk.dkhpID.hocPhan.maHP = %s and dk.dkhpID.sinhVien.mssv = %s",
+					"select dk from DKHP dk where dk.dkhpID.hocPhan.maHP = %d and dk.dkhpID.sinhVien.mssv = %d",
 					hp.getMaHP(), sv.getMssv());
 			@SuppressWarnings("unchecked")
 			Query<DKHP> query = session.createQuery(hql);

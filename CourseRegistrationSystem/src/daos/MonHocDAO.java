@@ -24,6 +24,26 @@ public class MonHocDAO {
 		return sv;
 	}
 
+	public static MonHoc layThongTinMonHocVoiTen(String tenMH) {
+		MonHoc mh = null;
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		try {
+			String hql = "select mh from MonHoc mh where mh.tenMH = '" + tenMH + "'";
+
+			@SuppressWarnings("unchecked")
+			Query<MonHoc> query = session.createQuery(hql);
+			List<MonHoc> ds = query.list();
+			if (ds != null && ds.size() > 0)
+				mh = ds.get(0);
+		} catch (HibernateException ex) {
+			// Log the exception
+			System.err.println(ex);
+		} finally {
+			session.close();
+		}
+		return mh;
+	}
+
 	public static List<MonHoc> layDanhSachMonHoc() {
 		List<MonHoc> ds = null;
 		Session session = HibernateUtil.getSessionFactory().openSession();

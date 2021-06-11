@@ -4,20 +4,21 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
+import java.util.List;
 
 import daos.DKHPDAO;
 import daos.GiaoVienDAO;
 import daos.HocKiDAO;
 import daos.HocKiHienTaiDAO;
 import daos.HocPhanDAO;
+import daos.KyDKHPDAO;
 import daos.MonHocDAO;
-import daos.SinhVienDAO;
+import pojo.DKHP;
 import pojo.GiaoVien;
 import pojo.HocKi;
 import pojo.HocPhan;
+import pojo.KyDKHP;
 import pojo.MonHoc;
-import pojo.SinhVien;
 
 public class HocPhanPanel extends JPanel implements ActionListener {
 	private static final long serialVersionUID = 1L;
@@ -73,7 +74,7 @@ public class HocPhanPanel extends JPanel implements ActionListener {
 			if (thongTinHocPhanMoi == null)
 				break;
 
-			MonHoc mh = MonHocDAO.layThongTinMonHoc(thongTinHocPhanMoi[0]);
+			MonHoc mh = MonHocDAO.layThongTinMonHocVoiTen(thongTinHocPhanMoi[0]);
 			GiaoVien gvlt = GiaoVienDAO.layThongTinGiaoVien(thongTinHocPhanMoi[1]);
 			if (mh == null) {
 				JOptionPane.showMessageDialog(this, "Môn học với mã " + thongTinHocPhanMoi[0] + " không tồn tại",
@@ -90,11 +91,12 @@ public class HocPhanPanel extends JPanel implements ActionListener {
 					newHocPhan.setThu(thongTinHocPhanMoi[3]);
 					newHocPhan.setCa(thongTinHocPhanMoi[4]);
 					newHocPhan.setSlotToiDa(Integer.parseInt(thongTinHocPhanMoi[5]));
+					List<KyDKHP> cacKyDKHPTrongHKHienTai = KyDKHPDAO.layDanhSachKyDKHP(hocKiHienTai);
+					newHocPhan.setKyDKHP(cacKyDKHPTrongHKHienTai.get(cacKyDKHPTrongHKHienTai.size() - 1));
 
 					HocPhanDAO.themHocPhan(newHocPhan);
 
 					capNhatVoiHocKiHienTai(hocKiHienTai);
-					listPanel.setTableSelectedRow(listPanel.theTable.getRowCount() - 1);
 
 					JOptionPane.showMessageDialog(this, "Thêm học phần thành công!", "Thông báo",
 							JOptionPane.INFORMATION_MESSAGE, null);
@@ -114,6 +116,12 @@ public class HocPhanPanel extends JPanel implements ActionListener {
 					"Bạn có chắc muốn xoá học phần " + hocPhanCanXoa.getMonHoc().getTenMH(), "Xoá học phần",
 					JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
 
+				List<DKHP> dsDKHP = DKHPDAO.layDanhSachDKHP();
+				for (DKHP dkhp : dsDKHP) {
+					if (dkhp.getDkhpID().getHocPhan().getMaHP() == hocPhanCanXoa.getMaHP())
+						DKHPDAO.xoaDKHP(dkhp.getDkhpID());
+				}
+
 				HocPhanDAO.xoaHocPhan(hocPhanCanXoa.getMaHP());
 
 				capNhatVoiHocKiHienTai(hocKiHienTai);
@@ -125,65 +133,22 @@ public class HocPhanPanel extends JPanel implements ActionListener {
 		}
 
 		case "Xem danh sách sinh viên đăng ký": {
+			if (listPanel.theTable.getSelectedRow() == -1)
+				break;
+
 			HocPhan selectedHocPhan = HocKiDAO.layDanhSachHocPhanTrongHocKi(hocKiHienTai)
 					.get(listPanel.theTable.getSelectedRow());
 
 			JDialog dssvDialog = new JDialog();
 			JPanel dssvContent = new JPanel(new GridBagLayout());
 
-			JScrollPane theScrollPane = new JScrollPane();
-			JTable theTable = new JTable();
-			theTable.setModel(new DefaultTableModel(DKHPDAO.getObjectMatrix(DKHPDAO.layDanhSachDKHP(selectedHocPhan)),
-					new String[] { "MSSV", "Họ tên", "Mã môn học", "Tên môn học", "Tên gvlt", "Thứ", "Thời gian",
-							"Thời gian đăng kí học phần" }) {
-
-				private static final long serialVersionUID = 1L;
-
-				@Override
-				public boolean isCellEditable(int row, int column) {
-					return false;
-				}
-			});
-			theTable.setRowHeight(30);
-			if (theTable.getRowCount() > 0)
-				theTable.setRowSelectionInterval(0, 0);
-			theScrollPane.setViewportView(theTable);
-
-			JButton timSVButton = new JButton("Tìm sinh viên");
-			timSVButton.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					EnterInputDialog timSinhVienDialog = new EnterInputDialog(new String[] { "MSSV cần tìm" },
-							new JComponent[] { new JTextField() }, new String[] { "" }, "Tìm sinh viên");
-					String[] result = timSinhVienDialog.showDialog();
-					if (result == null)
-						return;
-
-					try {
-						int mssvCanTim = Integer.parseInt(result[0]);
-
-						SinhVien svTimDuoc = SinhVienDAO.layThongTinSinhVien(mssvCanTim);
-						if (svTimDuoc == null) {
-							JOptionPane.showMessageDialog(dssvDialog, "Sinh viên không tồn tại", "Thông báo",
-									JOptionPane.INFORMATION_MESSAGE, null);
-						} else {
-							for (int i = 0; i < theTable.getRowCount(); i++) {
-								if (theTable.getValueAt(i, 0).equals(svTimDuoc.getMssv())) {
-									listPanel.setTableSelectedRow(i);
-									break;
-								}
-							}
-						}
-					} catch (NumberFormatException e1) {
-						JOptionPane.showMessageDialog(dssvDialog, "MSSV phải là 1 số nguyên", "Thông báo",
-								JOptionPane.WARNING_MESSAGE, null);
-					}
-				}
-			});
+			ListPanel dssvListPanel = new ListPanel(null,
+					DKHPDAO.getObjectMatrix(DKHPDAO.layDanhSachDKHP(selectedHocPhan)), new String[] { "MSSV", "Họ tên",
+							"Mã môn học", "Tên môn học", "Tên gvlt", "Thứ", "Thời gian", "Thời gian đăng kí học phần" },
+					new String[] {}, null, "Danh sách sinh viên đăng ký");
 
 			GBCBuilder gbc = new GBCBuilder(1, 1).setFill(GridBagConstraints.BOTH).setWeight(1, 1);
-			dssvContent.add(theScrollPane, gbc);
-			dssvContent.add(timSVButton, gbc.setGrid(1, 2).setWeight(1, 0));
+			dssvContent.add(dssvListPanel, gbc);
 
 			dssvDialog.setContentPane(dssvContent);
 			dssvDialog.setTitle("Danh sách sinh viên đăng ký học phần " + selectedHocPhan.getMonHoc().getTenMH());

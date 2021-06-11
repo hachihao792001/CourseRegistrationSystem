@@ -6,7 +6,6 @@ import java.awt.event.ActionListener;
 import java.util.List;
 import javax.swing.*;
 
-import daos.HibernateUtil;
 import daos.TaiKhoanDAO;
 import pojo.TaiKhoan;
 
@@ -69,7 +68,6 @@ public class LoginScreen extends JFrame implements ActionListener {
 
 		JDialog loadingScreen = new JDialog();
 		JPanel loadingContent = new JPanel(new GridBagLayout());
-		loadingScreen.setUndecorated(false);
 		JLabel loadingLabel = new JLabel("Đang tải dữ liệu...");
 		loadingLabel.setFont(new Font("Tahoma", 0, 22));
 		loadingContent.add(loadingLabel, new GBCBuilder(1, 1).setInsets(10));
@@ -80,7 +78,7 @@ public class LoginScreen extends JFrame implements ActionListener {
 		loadingScreen.setLocationRelativeTo(null);
 		loadingScreen.setVisible(true);
 
-		HibernateUtil.getSessionFactory().openSession();
+		TaiKhoanDAO.layDanhSachTaiKhoan();
 
 		loadingScreen.setVisible(false);
 		loadingScreen.dispose();
